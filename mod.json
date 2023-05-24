@@ -1,0 +1,9 @@
+{
+	"geode":        "v1.0.0",
+	"version":      "v0.0.0",
+	"id":           "gay.rooot.meow",
+	"name":         "meow",
+	"developer":    "rooot",
+	"description":  "meow meow",
+	"binary":       "meow"
+}
