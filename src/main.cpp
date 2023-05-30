@@ -18,11 +18,14 @@ using namespace geode::prelude;
                 case ENET_EVENT_TYPE_CONNECT: {
                     g->connected = true;
                     fmt::print("connected to port {}\n", Global::get()->host->address.port);
+
+                    //Notification::create("connected!!", NotificationIcon::Error)->show();
                     break;
                 }
                 case ENET_EVENT_TYPE_DISCONNECT: {
                     g->connected = false;
                     // todo!!
+
                     break;
                 }
                 case ENET_EVENT_TYPE_NONE: {
@@ -36,6 +39,7 @@ using namespace geode::prelude;
 
 $execute {
     fmt::print("loading meow :3\n");
+
     if (enet_initialize() != 0) {
         fmt::print("failed to init enet!!\n");
         return;

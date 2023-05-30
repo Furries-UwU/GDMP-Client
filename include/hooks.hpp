@@ -3,19 +3,20 @@
 
 class $modify(MenuLayer) {
     void onMoreGames(cocos2d::CCObject* p0) {
+        Global *g = Global::get();
+
         fmt::print("meow meeow!\n");
-        Global* g = Global::get();
 
         ENetAddress addr;
-        enet_address_set_host(&addr, "0.0.0.0");
+        enet_address_set_host(&addr, "127.0.0.1");
         addr.port = 34154;
 
         g->peer = enet_host_connect(g->host, &addr, 1, 0);
         if (!g->peer) {
-            fmt::print("failed to connect to server!!");
+            fmt::print("failed to connect to server!!\n");
             return;
         }
-        fmt::print("peer id: {}", g->peer->connectID);
+        fmt::print("peer id: {} {}\n", g->peer->incomingPeerID, g->peer->outgoingPeerID);
     }
 };
 
@@ -26,6 +27,10 @@ class $modify(PlayLayer) {
             Global* global = Global::get();
 
             fmt::print("level id {}\n", level->m_levelID.value());
+
+            if (global->connected) {
+                int32_t levelId = level->m_levelID;
+            }
 
             auto idk = SimplePlayer::create(0);
 
