@@ -4,7 +4,10 @@
 
 class Global {
 public:
-    PlayLayer *playLayer = nullptr;
+    ENetHost *host = nullptr;
+    ENetPeer *peer = nullptr;
+
+    bool connected = false;
 
     // temporary, for testing
     // this needs to be replaced with some sort of class/map/whatever that keeps track over players (player/network id?)
