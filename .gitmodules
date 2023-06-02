@@ -3,4 +3,4 @@
 	url = https://github.com/Furries-UwU/enet
 [submodule "proto"]
 	path = proto
-	url = https://github.com/Furries-UwU/gdmp-proto
+	url = https://github.com/Furries-UwU/GDMP-Proto
