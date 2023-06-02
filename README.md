@@ -4,7 +4,7 @@ This is where she makes a mod.
 ## Build Instructions
 
 - Install [Geode](https://docs.geode-sdk.org/installation)
-- 
+
 ### Windows
 ```shell
 git clone https://github.com/Furries-UwU/GDMP-Client.git --recursive
@@ -28,8 +28,7 @@ cmake --build build --config Release
 
 ### MacOS
 - idk
-<img src="https://github.com/Furries-UwU/GDMP-Client/assets/78933889/f52682ee-ac69-4d4f-b7a1-a06c9873d470" width="30%">
-
+- <img src="https://github.com/Furries-UwU/GDMP-Client/assets/78933889/f52682ee-ac69-4d4f-b7a1-a06c9873d470" width="420px">
 
 ## Credits
 **Thanks to**
