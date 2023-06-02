@@ -1,47 +1,61 @@
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(meow VERSION 1.0.0)
+project(GDMP VERSION 1.0.0)
+
+include(cmake/CPM.cmake)
+
+if (WIN32 OR MINGW)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
+endif ()
+
+if (CMAKE_CROSSCOMPILING)
+    set(Protobuf_LIBRARIES ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs)
+    set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf-lite.lib)
+    set(Protobuf_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf.lib)
+    set(Protobuf_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/src/protobuf/src)
+endif ()
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
+    set(CMAKE_OSX_ARCHITECTURES x86_64)
+
+    CPMAddPackage(
+            NAME protobuf
+            VERSION 23.2
+            GITHUB_REPOSITORY protocolbuffers/protobuf
+            OPTIONS "BUILD_SHARED_LIBS OFF" "protobuf_BUILD_TESTS OFF" "protobuf_BUILD_LIBPROTOC ON")
+
+    include(${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
+
+    set(PROTOBUF_LIBRARY libprotobuf)
+    set(Protobuf_INCLUDE_DIRS ${protobuf_SOURCE_DIR}/src ${protobuf_SOURCE_DIR}/third_party/abseil-cpp)
+else ()
+    find_package(Protobuf REQUIRED)
+endif ()
 
 # Use GLOB_RECURSE instead of GLOB
-# to recursively add all source files 
-# under src/ 
+# to recursively add all source files
+# under src/
 file(GLOB SOURCES
-	src/*.cpp
-)
+        src/*.cpp
+        )
 
-# i have no idea what i'm doing but this seems to work lmao
-if(CMAKE_CROSSCOMPILING)
-    message(STATUS "cross compiling - using bundled protobuf things")
-    # gl getting these, took me a few hours ;3
-    # protobuf version: 3.21.12
-    set(Protobuf_LIBRARIES ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs)
-    set(Protobuf_LITE_LIBRARY_RELEASE ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf-lite.lib)
-    set(Protobuf_LIBRARY  ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf.lib)
-    set(Protobuf_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/protobuf_win32/src/protobuf/src)
-
-endif()
-
-find_package(Protobuf REQUIRED)
-
-add_compile_definitions(WIN32_LEAN_AND_MEAN)
 add_subdirectory(external/enet)
-# Set up the mod binary
-add_library(${PROJECT_NAME} SHARED ${SOURCES} src/global.cpp proto/packet.proto)
+add_library(${PROJECT_NAME} SHARED ${SOURCES} proto/packet.proto)
 protobuf_generate(TARGET ${PROJECT_NAME} LANGUAGE cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} external/enet/include ${Protobuf_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/proto) #${Protobuf_INCLUDE_DIRS}
+target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} external/enet/include ${Protobuf_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/proto)
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
-else()
+else ()
     message(STATUS "Found Geode: $ENV{GEODE_SDK}")
-endif()
+endif ()
 
 add_subdirectory($ENV{GEODE_SDK} $ENV{GEODE_SDK}/build)
 
 # Set up dependencies, resources, link Geode
 setup_geode_mod(${PROJECT_NAME})
-message(STATUS "PROTOBUF LIB: ${PROTOBUF_LIBRARY}")
 target_link_libraries(${PROJECT_NAME} enet ${PROTOBUF_LIBRARY})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

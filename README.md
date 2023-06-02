@@ -1,3 +1,2 @@
-# geometry dash multiplayer mod
-<!-- :3 -->
+# GDMP-Client
 This is where she makes a mod.
