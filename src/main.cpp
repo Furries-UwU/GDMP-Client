@@ -39,6 +39,7 @@ using namespace geode::prelude;
 
 $execute {
     fmt::print("loading meow :3\n");
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     if (enet_initialize() != 0) {
         fmt::print("failed to init enet!!\n");

@@ -1,3 +1,6 @@
 [submodule "external/enet"]
 	path = external/enet
 	url = https://github.com/Furries-UwU/enet
+[submodule "proto"]
+	path = proto
+	url = https://github.com/Furries-UwU/gdmp-proto

@@ -1,6 +1,6 @@
 #include "include.hpp"
 #include "utils.hpp"
-//#include "packet.pb.h"
+#include "proto/packet.pb.h"
 
 class $modify(MenuLayer) {
     void onMoreGames(cocos2d::CCObject* p0) {
@@ -30,9 +30,28 @@ class $modify(PlayLayer) {
             fmt::print("level id {}\n", level->m_levelID.value());
 
             if (global->connected) {
-                //gdmp::Packet packet {};
+                fmt::print("making join packet!!");
+                int32_t level_id = level->m_levelID;
 
-                int32_t levelId = level->m_levelID;
+                gdmp::Packet packet;
+                packet.set_packet_type(4); // 4 = join ig
+
+                gdmp::RoomInfo room;
+                room.set_level_id(level_id);
+                auto player_join = new gdmp::PlayerJoin();
+                player_join->set_allocated_room(&room);
+
+                packet.set_allocated_player_join(player_join);
+
+                // ugly shit stupid code vvvvv -----
+                size_t size = packet.ByteSizeLong();
+                void *buffer = malloc(size); /* manual memory allocation my beloved <3 */
+                packet.SerializeToArray(buffer, size);
+                auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
+                free(buffer); /* I AM FREEEEEEEEEEEEEE */
+
+                enet_peer_send(global->peer, 0, enetpacket);
+                enet_packet_destroy(enetpacket);
             }
 
             auto idk = SimplePlayer::create(0);

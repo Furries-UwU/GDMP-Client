@@ -11,9 +11,16 @@ file(GLOB SOURCES
 	src/*.cpp
 )
 
+# i have no idea what i'm doing but this seems to work lmao
 if(CMAKE_CROSSCOMPILING)
-    message(STATUS "cross compiling - using prebuilt protobuf libs")
-    set(Protobuf_LIBRARIES ${CMAKE_ROOT}/protobuf_win32/src/protobuf/build)
+    message(STATUS "cross compiling - using bundled protobuf things")
+    # gl getting these, took me a few hours ;3
+    # protobuf version: 3.21.12
+    set(Protobuf_LIBRARIES ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs)
+    set(Protobuf_LITE_LIBRARY_RELEASE ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf-lite.lib)
+    set(Protobuf_LIBRARY  ${PROJECT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf.lib)
+    set(Protobuf_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/protobuf_win32/src/protobuf/src)
+
 endif()
 
 find_package(Protobuf REQUIRED)
@@ -22,27 +29,9 @@ add_compile_definitions(WIN32_LEAN_AND_MEAN)
 add_subdirectory(external/enet)
 # Set up the mod binary
 add_library(${PROJECT_NAME} SHARED ${SOURCES} src/global.cpp proto/packet.proto)
+protobuf_generate(TARGET ${PROJECT_NAME} LANGUAGE cpp)
 
-file(GLOB PROTOBUF_DEFINITION_FILES "proto/*.proto")
-set(PROTOBUF_INPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/proto")
-set(PROTOBUF_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-foreach(file ${PROTOBUF_DEFINITION_FILES})
-    message(STATUS "bruhh")
-    set(PROTOBUF_ARGUMENTS "protoc --proto_path=\"${PROTOBUF_INPUT_DIRECTORY}\" --cpp_out=\"${PROTOBUF_OUTPUT_DIRECTORY}\" \"${file}\"")
-    message(STATUS ${PROTOBUF_ARGUMENTS})
-    execute_process(
-            COMMAND protoc --proto_path=${PROTOBUF_INPUT_DIRECTORY} --cpp_out=${PROTOBUF_OUTPUT_DIRECTORY} "${file}"
-
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            RESULT_VARIABLE PROTOBUF_RESULT
-            OUTPUT_VARIABLE PROTOBUF_OUTPUT_VARIABLE)
-    message(STATUS "RESULT" ${PROTOBUF_RESULT})
-    message(STATUS "OUTPUT" ${PROTOBUF_OUTPUT_VARIABLE})
-endforeach()
-
-file(GLOB PROTOBUF_MODELS_INCLUDES "proto_out/*.pb.cc" "proto_out/*.hpp")
-
-target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} external/enet/include) #${Protobuf_INCLUDE_DIRS}
+target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} external/enet/include ${Protobuf_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/proto) #${Protobuf_INCLUDE_DIRS}
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
@@ -54,4 +43,5 @@ add_subdirectory($ENV{GEODE_SDK} $ENV{GEODE_SDK}/build)
 
 # Set up dependencies, resources, link Geode
 setup_geode_mod(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} enet)
+message(STATUS "PROTOBUF LIB: ${PROTOBUF_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} enet ${PROTOBUF_LIBRARY})

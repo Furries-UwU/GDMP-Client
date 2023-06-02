@@ -1,9 +1,9 @@
 {
 	"geode":        "v1.0.0",
 	"version":      "v0.0.0",
-	"id":           "gay.rooot.meow",
-	"name":         "meow",
+	"id":           "gay.rooot.gdmp",
+	"name":         "gdmp",
 	"developer":    "rooot",
-	"description":  "meow meow",
-	"binary":       "meow"
+	"description":  "multiplayer mod",
+	"binary":       "gdmp"
 }
