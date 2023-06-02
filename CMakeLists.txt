@@ -4,31 +4,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(GDMP VERSION 1.0.0)
 
+option(USE_PREBUILT_LIBS "Only for rooot lmao" OFF)
+
 include(cmake/CPM.cmake)
 
 if (WIN32 OR MINGW)
     add_compile_definitions(WIN32_LEAN_AND_MEAN)
 endif ()
 
-if (CMAKE_CROSSCOMPILING)
+if (USE_PREBUILT_LIBS)
     set(Protobuf_LIBRARIES ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs)
     set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf-lite.lib)
     set(Protobuf_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf.lib)
     set(Protobuf_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/src/protobuf/src)
-    find_package(Protobuf REQUIRED)
 elseif (WIN32 OR MINGW)
     set(USE_PROTOBUF_CPM ON)
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_OSX_ARCHITECTURES x86_64)
     set(USE_PROTOBUF_CPM ON)
-else ()
-    find_package(Protobuf REQUIRED)
 endif ()
 
 if (USE_PROTOBUF_CPM)
     CPMAddPackage(
             NAME protobuf
-            VERSION 23.2
+            VERSION 23.1
             GITHUB_REPOSITORY protocolbuffers/protobuf
             OPTIONS "BUILD_SHARED_LIBS OFF" "protobuf_BUILD_TESTS OFF" "protobuf_BUILD_LIBPROTOC ON")
 
@@ -36,7 +35,11 @@ if (USE_PROTOBUF_CPM)
 
     set(PROTOBUF_LIBRARY libprotobuf)
     set(Protobuf_INCLUDE_DIRS ${protobuf_SOURCE_DIR}/src ${protobuf_SOURCE_DIR}/third_party/abseil-cpp)
-endif()
+endif ()
+
+if (NOT protobuf_ADDED)
+    find_package(Protobuf REQUIRED)
+endif ()
 
 # Use GLOB_RECURSE instead of GLOB
 # to recursively add all source files
