@@ -15,11 +15,16 @@ if (CMAKE_CROSSCOMPILING)
     set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf-lite.lib)
     set(Protobuf_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/build/libs/libprotobuf.lib)
     set(Protobuf_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/protobuf_win32/src/protobuf/src)
+elseif (WIN32 OR MINGW)
+    set(USE_PROTOBUF_CPM ON)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
+    set(CMAKE_OSX_ARCHITECTURES x86_64)
+    set(USE_PROTOBUF_CPM ON)
+else ()
+    find_package(Protobuf REQUIRED)
 endif ()
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm64")
-    set(CMAKE_OSX_ARCHITECTURES x86_64)
-
+if (USE_PROTOBUF_CPM)
     CPMAddPackage(
             NAME protobuf
             VERSION 23.2
@@ -30,9 +35,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND ${CMAKE_SYSTEM_PROCESSOR} MATCHES 
 
     set(PROTOBUF_LIBRARY libprotobuf)
     set(Protobuf_INCLUDE_DIRS ${protobuf_SOURCE_DIR}/src ${protobuf_SOURCE_DIR}/third_party/abseil-cpp)
-else ()
-    find_package(Protobuf REQUIRED)
-endif ()
+endif()
 
 # Use GLOB_RECURSE instead of GLOB
 # to recursively add all source files
