@@ -5,9 +5,13 @@ This is where she makes a mod.
 
 - Install [Geode](https://docs.geode-sdk.org/installation)
 
-### Windows
+- clone the repo recursively:
 ```shell
 git clone https://github.com/Furries-UwU/GDMP-Client.git --recursive
+```
+
+### Windows
+```shell
 cmake . -A Win32
 cmake --build . --config Release
 ```
@@ -29,6 +33,11 @@ cmake --build build --config Release
 ### MacOS
 - idk
 - <img src="https://github.com/Furries-UwU/GDMP-Client/assets/78933889/f52682ee-ac69-4d4f-b7a1-a06c9873d470" width="420px">
+- apparently it's the same as windows without the `-A Win32`
+```shell
+cmake .
+cmake --build . --config Release
+```
 
 ## Credits
 **Thanks to**
