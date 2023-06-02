@@ -51,7 +51,9 @@ class $modify(PlayLayer) {
                 free(buffer); /* I AM FREEEEEEEEEEEEEE */
 
                 enet_peer_send(global->peer, 0, enetpacket);
-                enet_packet_destroy(enetpacket);
+                //enet_packet_destroy(enetpacket);
+                /* this causes the packet to not get sent fully because you're not supposed to call enet_packet_destroy
+                right after sending the packet */
             }
 
             auto idk = SimplePlayer::create(0);
