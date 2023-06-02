@@ -50,3 +50,10 @@ Source/Geode/pkg/uber-apk-signer.jar
 
 # ILY vscode
 **/.vscode
+
+# cmake
+cmake-build-*/
+.cmake
+
+# im out of IDEAs
+.idea
