@@ -36,9 +36,9 @@ class $modify(PlayLayer) {
                 gdmp::Packet packet;
                 packet.set_packet_type(4); // 4 = join ig
 
-                gdmp::RoomInfo room;
+                gdmp::Room room;
                 room.set_level_id(level_id);
-                auto player_join = new gdmp::PlayerJoin();
+                auto player_join = new gdmp::PlayerJoinPacket();
                 player_join->set_allocated_room(&room);
 
                 packet.set_allocated_player_join(player_join);
