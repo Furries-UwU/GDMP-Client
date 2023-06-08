@@ -28,7 +28,6 @@ Gamemode getGamemodeFromPlayer(PlayerObject *player) {
     } else {
         return Gamemode::CUBE;
     }
-    return Gamemode::CUBE;
 }
 
 IconType getIconType(Gamemode gamemode) {
