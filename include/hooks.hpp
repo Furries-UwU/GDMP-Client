@@ -36,10 +36,16 @@ class $modify(PlayLayer) {
                 gdmp::Packet packet;
                 packet.set_packet_type(4); // 4 = join ig
 
+                fmt::print("getting visuals!!\n");
+                auto visual = *getPlayerVisualData(this->m_player1, this->m_player2);
+                fmt::print("got visuals!!\n");
+
                 gdmp::Room room;
                 room.set_level_id(level_id);
+
                 auto player_join = new gdmp::PlayerJoinPacket();
                 player_join->set_allocated_room(&room);
+                player_join->set_allocated_visual(&visual);
 
                 packet.set_allocated_player_join(player_join);
 
@@ -75,43 +81,29 @@ class $modify(PlayLayer) {
 
             Global* global = Global::get();
 
-            auto idk = global->tmp;
+            gdmp::Packet packet;
+            packet.set_packet_type(5);
 
-            if(!idk) return;
+            // player move
+            auto player_move = new gdmp::PlayerMovePacket();
 
-            idk->setPositionX(this->m_player1->m_position.x);
-            idk->setPositionY(this->m_player1->m_position.y + 15.f);
-            idk->setColor(this->m_player1->getColor());
-            idk->setID(this->m_player1->getID());
-            idk->setRotation(this->m_player1->getRotation());
+            auto pos1 = getPositionDataFromPlayer(this->m_player1);
+            player_move->set_allocated_pos_p1(&pos1);
 
-            auto gamemode = getGamemodeFromPlayer(m_player1);
-
-            auto gameerrr = GameManager::sharedState();
-
-            int iconID = 0;
-            if (gamemode == Gamemode::SHIP) {
-                iconID = gameerrr->getPlayerShip();
-            } else if (gamemode == Gamemode::BALL) {
-                iconID = gameerrr->getPlayerBall();
-            } else if (gamemode == Gamemode::UFO) {
-                iconID = gameerrr->getPlayerBird();
-            } else if (gamemode == Gamemode::WAVE) {
-                iconID = gameerrr->getPlayerDart();
-            } else if (gamemode == Gamemode::ROBOT) {
-                iconID = gameerrr->getPlayerRobot();
-            } else if (gamemode == Gamemode::SPIDER) {
-                iconID = gameerrr->getPlayerSpider();
-            } else {
-                iconID = gameerrr->getPlayerFrame();
+            if (this->m_player2 && this->m_isDualMode) {
+                auto pos2 = getPositionDataFromPlayer(this->m_player2);
+                player_move->set_allocated_pos_p2(&pos2);
             }
 
-            idk->updatePlayerFrame(iconID, getIconType(gamemode));
+            packet.set_allocated_player_move(player_move);
 
-            //this->m_player1->playDeathEffect();
+            // ugly shit stupid code vvvvv -----
+            size_t size = packet.ByteSizeLong();
+            void *buffer = malloc(size); /* manual memory allocation my beloved <3 */
+            packet.SerializeToArray(buffer, size);
+            auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
+            free(buffer); /* I AM FREEEEEEEEEEEEEE */
 
-            idk->setFlipY(true);
-
-            idk->setScale(2.f);
+            enet_peer_send(global->peer, 0, enetpacket);
         }
 };
