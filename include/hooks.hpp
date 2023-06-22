@@ -2,6 +2,27 @@
 #include "utils.hpp"
 #include "proto/packet.pb.h"
 
+std::vector<std::function<void()>> functionQueue;
+std::mutex threadMutex;
+
+void executeInGDThread(std::function<void()> f) {
+    std::lock_guard<std::mutex> lock(threadMutex);
+    functionQueue.push_back(std::move(f));
+}
+
+class $modify(cocos2d::CCScheduler) {
+    void update(float dt) {
+        CCScheduler::update(dt);
+
+        threadMutex.lock();
+        auto buffer = std::move(functionQueue);
+        threadMutex.unlock();
+
+        for (auto &f: buffer)
+            f();
+    }
+};
+
 class $modify(MenuLayer) {
     void onMoreGames(cocos2d::CCObject* p0) {
         Global *g = Global::get();
@@ -61,11 +82,6 @@ class $modify(PlayLayer) {
                 /* this causes the packet to not get sent fully because you're not supposed to call enet_packet_destroy
                 right after sending the packet */
             }
-
-            auto idk = SimplePlayer::create(0);
-
-            this->m_objectLayer->addChild(idk);
-            global->tmp = idk;
 
             return true;
         }

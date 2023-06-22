@@ -18,12 +18,12 @@ using namespace geode::prelude;
             switch (event.type) {
                 case ENET_EVENT_TYPE_RECEIVE: {
                     // todo!!
-                    fmt::print("recv'd packet with length {}\n", event.packet->dataLength);
+                    //fmt::print("recv'd packet with length {}\n", event.packet->dataLength);
 
                     auto* gdmp_packet = new gdmp::Packet();
                     gdmp_packet->ParseFromArray(event.packet->data, event.packet->dataLength);
 
-                    fmt::print("parsed packet, somehow.. type: {}\n", gdmp_packet->packet_type());
+                    //fmt::print("parsed packet, somehow.. type: {}\n", gdmp_packet->packet_type());
 
                     if (gdmp_packet->has_player_join()) {
                         fmt::print("a player has suddenly appeared!!\n");
@@ -32,8 +32,28 @@ using namespace geode::prelude;
                         fmt::print("-> player id {} joined room {}\n", player_join.p_id(), player_join.room().level_id());
 
                         // todo: handle join
+
+                        executeInGDThread([player_join]() {
+                            auto playLayer = GameManager::sharedState()->getPlayLayer();
+                            if (!playLayer) return;
+                            fmt::print("hi from gd thread, getting visuals rn\n");
+
+                            auto visuals = player_join.visual();
+
+                            auto p1 = SimplePlayer::create(visuals.icon_cube());
+                            p1->setPosition({0, 0});
+                            p1->setColor(cc3x(visuals.colors().color_p1().primary()));
+                            p1->setSecondColor(cc3x(visuals.colors().color_p1().secondary()));
+
+                            playLayer->getObjectLayer()->addChild(p1);
+
+                            Global::get()->players[player_join.p_id()] = p1;
+
+                            fmt::print("added to playlayer-\n");
+                        });
+
                     } else if (gdmp_packet->has_player_move()) {
-                        fmt::print("*player moving noises*\n");
+                        //fmt::print("*player moving noises*\n");
 
                         auto player_move = gdmp_packet->player_move();
                         fmt::print("-> player id {} moved to P1[{} {}] P2[{} {}]\n", player_move.p_id(),
@@ -41,6 +61,34 @@ using namespace geode::prelude;
                                    player_move.pos_p2().pos_x(), player_move.pos_p2().pos_y());
 
                         // todo: handle move
+
+                        auto global = Global::get();
+
+                        auto p_id = player_move.p_id();
+                        auto playLayer = GameManager::sharedState()->getPlayLayer();
+                        if (!playLayer) {
+                            fmt::print("playlayer is null\n");
+                            continue;
+                        }
+                        if (!global->players.contains(p_id)) {
+                            fmt::print("player doesn't exist\n");
+                            continue;
+                        }
+
+                        auto p1 = global->players[p_id];
+
+                        auto pos_p1_x = player_move.pos_p1().pos_x();
+                        auto pos_p1_y = player_move.pos_p1().pos_y();
+                        auto rot_p1 = player_move.pos_p1().rotation();
+                        auto scale_p1 = player_move.pos_p1().scale();
+
+                        if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
+
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, p1]() {
+                            p1->setPosition({ pos_p1_x, pos_p1_y });
+                            p1->setRotation(rot_p1);
+                            p1->setScale(scale_p1);
+                        });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");
                         // todo: handle leave

@@ -55,7 +55,7 @@ gdmp::Position getPositionDataFromPlayer(PlayerObject *player) {
     pos.set_pos_x(player->m_position.x);
     pos.set_pos_y(player->m_position.y);
     pos.set_rotation(player->getRotation());
-    pos.set_scale(player->getRotation());
+    pos.set_scale(player->getScale());
     return pos;
 }
 

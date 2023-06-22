@@ -9,10 +9,7 @@ public:
 
     bool connected = false;
 
-    // temporary, for testing
-    // this needs to be replaced with some sort of class/map/whatever that keeps track over players (player/network id?)
-    // and their player data
-    SimplePlayer *tmp = nullptr;
+    std::unordered_map<uint64_t, SimplePlayer*> players;
 
     static Global *get();
 };
