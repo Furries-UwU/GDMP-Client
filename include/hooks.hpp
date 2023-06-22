@@ -106,9 +106,15 @@ class $modify(PlayLayer) {
             auto pos1 = getPositionDataFromPlayer(this->m_player1);
             player_move->set_allocated_pos_p1(&pos1);
 
+            auto gameMode1 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player1));
+            player_move->set_gamemode_p1(gameMode1);
+
             if (this->m_player2 && this->m_isDualMode) {
                 auto pos2 = getPositionDataFromPlayer(this->m_player2);
                 player_move->set_allocated_pos_p2(&pos2);
+
+                auto gameMode2 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player2));
+                player_move->set_gamemode_p2(gameMode2);
             }
 
             packet.set_allocated_player_move(player_move);

@@ -81,13 +81,16 @@ using namespace geode::prelude;
                         auto pos_p1_y = player_move.pos_p1().pos_y();
                         auto rot_p1 = player_move.pos_p1().rotation();
                         auto scale_p1 = player_move.pos_p1().scale();
+                        auto iconType_p1 = getIconType(getGamemodeFromGameMode(player_move.gamemode_p1()));
+                        auto iconID_p1 = 0;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, p1]() {
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, iconType_p1, p1]() {
                             p1->setPosition({ pos_p1_x, pos_p1_y });
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
+                            p1->updatePlayerFrame(iconID_p1, iconType_p1);
                         });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");

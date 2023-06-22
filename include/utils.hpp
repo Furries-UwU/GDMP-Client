@@ -30,6 +30,34 @@ Gamemode getGamemodeFromPlayer(PlayerObject *player) {
     }
 }
 
+gdmp::GameMode getGameModeFromGamemode(Gamemode gamemode) {
+    switch (gamemode) {
+        case NONE:   return gdmp::GameMode::NONE;
+        case CUBE:   return gdmp::GameMode::CUBE;
+        case SHIP:   return gdmp::GameMode::SHIP;
+        case BALL:   return gdmp::GameMode::BALL;
+        case UFO:    return gdmp::GameMode::UFO;
+        case WAVE:   return gdmp::GameMode::WAVE;
+        case ROBOT:  return gdmp::GameMode::ROBOT;
+        case SPIDER: return gdmp::GameMode::SPIDER;
+    }
+}
+
+Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
+    switch (gamemode) {
+        case gdmp::GameMode::NONE:   return Gamemode::NONE;
+        case gdmp::GameMode::CUBE:   return Gamemode::CUBE;
+        case gdmp::GameMode::SHIP:   return Gamemode::SHIP;
+        case gdmp::GameMode::BALL:   return Gamemode::BALL;
+        case gdmp::GameMode::UFO:    return Gamemode::UFO;
+        case gdmp::GameMode::WAVE:   return Gamemode::WAVE;
+        case gdmp::GameMode::ROBOT:  return Gamemode::ROBOT;
+        case gdmp::GameMode::SPIDER: return Gamemode::SPIDER;
+    }
+
+    return Gamemode::CUBE;
+}
+
 IconType getIconType(Gamemode gamemode) {
     switch (gamemode) {
         default:
