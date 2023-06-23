@@ -26,6 +26,8 @@ class $modify(MenuLayer) {
     void onMoreGames(cocos2d::CCObject* p0) {
         Global *g = Global::get();
 
+        if (g->connected) enet_peer_disconnect(g->peer, 0);
+
         ENetAddress addr;
         enet_address_set_host(&addr, "127.0.0.1");
         addr.port = 34154;
