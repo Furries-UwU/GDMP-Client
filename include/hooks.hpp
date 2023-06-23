@@ -55,7 +55,6 @@ class $modify(PlayLayer) {
                 int32_t level_id = level->m_levelID;
 
                 gdmp::Packet packet;
-                packet.set_packet_type(4); // 4 = join ig
 
                 fmt::print("getting visuals!!\n");
                 auto gameManager = GameManager::sharedState();
@@ -140,7 +139,6 @@ class $modify(PlayLayer) {
             Global* global = Global::get();
 
             gdmp::Packet packet;
-            packet.set_packet_type(5);
 
             // player move
             auto player_move = new gdmp::PlayerMovePacket();
