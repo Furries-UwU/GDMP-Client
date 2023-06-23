@@ -58,7 +58,43 @@ class $modify(PlayLayer) {
                 packet.set_packet_type(4); // 4 = join ig
 
                 fmt::print("getting visuals!!\n");
-                auto visual = *getPlayerVisualData(this->m_player1, this->m_player2);
+                auto gameManager = GameManager::sharedState();
+
+                auto visuals = new gdmp::PlayerVisuals();
+                visuals->set_icon_cube(gameManager->getPlayerFrame());
+                visuals->set_icon_ball(gameManager->getPlayerBall());
+                visuals->set_icon_ufo(gameManager->getPlayerBird());
+                visuals->set_icon_wave(gameManager->getPlayerDart());
+                visuals->set_icon_spider(gameManager->getPlayerSpider());
+
+                gdmp::Colors color_p1;
+                gdmp::Colors color_p2;
+
+#if __APPLE__ && TARGET_OS_MAC
+                // PlayerObject::getSecondaryColor has an binding on mac but not anywhere else and i cba to find it lmao
+    auto secondaryColor = getIntFromCCColor(p1->getSecondaryColor());
+#else
+                uint32_t secondaryColor = 0;
+
+                // hope this works c:
+                if (this->m_player1->m_iconSprite) {
+                    secondaryColor = getIntFromCCColor(this->m_player1->m_iconSprite->getColor());
+                }
+#endif
+
+                color_p1.set_primary(getIntFromCCColor(this->m_player1->getColor()));
+                color_p1.set_secondary(secondaryColor);
+
+                auto colors = new gdmp::ColorInfo();
+                colors->set_allocated_color_p1(&color_p1);
+                colors->set_allocated_color_p2(&color_p1); // todo: use p2 colors
+
+                colors->set_glowy(gameManager->getPlayerGlow());
+
+                fmt::print("meow!!\n");
+                visuals->set_allocated_colors(colors);
+                fmt::print("meow!! return visuals\n");
+
                 fmt::print("got visuals!!\n");
 
                 gdmp::Room room;
@@ -66,7 +102,7 @@ class $modify(PlayLayer) {
 
                 auto player_join = new gdmp::PlayerJoinPacket();
                 player_join->set_allocated_room(&room);
-                player_join->set_allocated_visual(&visual);
+                player_join->set_allocated_visual(visuals);
 
                 packet.set_allocated_player_join(player_join);
 
