@@ -146,33 +146,35 @@ class $modify(PlayLayer) {
 
             Global* global = Global::get();
 
-            gdmp::Packet packet;
+            if (global->connected) {
+                gdmp::Packet packet;
 
-            // player move
-            auto player_move = new gdmp::PlayerMovePacket();
+                // player move
+                auto player_move = new gdmp::PlayerMovePacket();
 
-            auto pos1 = getPositionDataFromPlayer(this->m_player1);
-            player_move->set_allocated_pos_p1(&pos1);
+                auto pos1 = getPositionDataFromPlayer(this->m_player1);
+                player_move->set_allocated_pos_p1(&pos1);
 
-            auto gameMode1 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player1));
-            player_move->set_gamemode_p1(gameMode1);
+                auto gameMode1 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player1));
+                player_move->set_gamemode_p1(gameMode1);
 
-            if (this->m_player2 && this->m_isDualMode) {
-                auto pos2 = getPositionDataFromPlayer(this->m_player2);
-                player_move->set_allocated_pos_p2(&pos2);
+                if (this->m_player2 && this->m_isDualMode) {
+                    auto pos2 = getPositionDataFromPlayer(this->m_player2);
+                    player_move->set_allocated_pos_p2(&pos2);
 
-                auto gameMode2 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player2));
-                player_move->set_gamemode_p2(gameMode2);
+                    auto gameMode2 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player2));
+                    player_move->set_gamemode_p2(gameMode2);
+                }
+
+                packet.set_allocated_player_move(player_move);
+
+                size_t size = packet.ByteSizeLong();
+                void *buffer = malloc(size);
+                packet.SerializeToArray(buffer, size);
+                auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
+                free(buffer);
+
+                enet_peer_send(global->peer, 0, enetPacket);
             }
-
-            packet.set_allocated_player_move(player_move);
-
-            size_t size = packet.ByteSizeLong();
-            void *buffer = malloc(size);
-            packet.SerializeToArray(buffer, size);
-            auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
-            free(buffer);
-
-            enet_peer_send(global->peer, 0, enetPacket);
         }
 };
