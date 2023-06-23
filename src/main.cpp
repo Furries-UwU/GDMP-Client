@@ -156,7 +156,21 @@ using namespace geode::prelude;
                         });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");
-                        // todo: handle leave
+                        auto global = Global::get();
+
+                        auto player_move = gdmp_packet->player_move();
+                        auto p_id = player_move.p_id();
+
+                        if (!global->players.contains(p_id)) {
+                            fmt::print("player doesn't exist\n");
+                            continue;
+                        }
+
+                        auto p = global->players[p_id];
+
+                        if (p.p1) p.p1->removeMeAndCleanup();
+                        if (p.p2) p.p2->removeMeAndCleanup();
+                        global->players.erase(p_id);
                     } else {
                         fmt::print("wtf how\n");
                     }

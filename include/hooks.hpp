@@ -130,6 +130,27 @@ class $modify(PlayLayer) {
             }
             global->players.clear();
 
+            if (global->connected) {
+                int32_t level_id = this->m_level->m_levelID;
+                gdmp::Packet packet;
+
+                gdmp::Room room;
+                room.set_level_id(level_id);
+
+                auto leavePacket = new gdmp::PlayerLeavePacket();
+                leavePacket->set_allocated_room(&room);
+
+                packet.set_allocated_player_leave(leavePacket);
+
+                size_t size = packet.ByteSizeLong();
+                void *buffer = malloc(size);
+                packet.SerializeToArray(buffer, size);
+                auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
+                free(buffer);
+
+                enet_peer_send(global->peer, 0, enetpacket);
+            }
+
             PlayLayer::onQuit();
         }
 
