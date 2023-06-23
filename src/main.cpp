@@ -17,26 +17,18 @@ using namespace geode::prelude;
         while (enet_host_service(Global::get()->host, &event, 0) > 0) {
             switch (event.type) {
                 case ENET_EVENT_TYPE_RECEIVE: {
-                    // todo!!
-                    //fmt::print("recv'd packet with length {}\n", event.packet->dataLength);
 
                     auto* gdmp_packet = new gdmp::Packet();
                     gdmp_packet->ParseFromArray(event.packet->data, event.packet->dataLength);
-
-                    //fmt::print("parsed packet, somehow.. type: {}\n", gdmp_packet->packet_type());
 
                     if (gdmp_packet->has_player_join()) {
                         fmt::print("a player has suddenly appeared!!\n");
 
                         auto player_join = gdmp_packet->player_join();
-                        fmt::print("-> player id {} joined room {}\n", player_join.p_id(), player_join.room().level_id());
-
-                        // todo: handle join
 
                         executeInGDThread([player_join]() {
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
                             if (!playLayer) return;
-                            fmt::print("hi from gd thread, getting visuals rn\n");
 
                             auto visuals = player_join.visual();
 
@@ -46,13 +38,6 @@ using namespace geode::prelude;
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
                             auto glowy = visuals.colors().glowy();
-
-                            fmt::print("RECV SETCOLOR PRIMARY {}: {} {} {}\n",
-                                       col_primary_p1,
-                                       (col_primary_p1 >> 16) & 0xff,
-                                       (col_primary_p1 >> 8) & 0xff,
-                                       col_primary_p1  & 0xff
-                                       );
 
                             p1->setColor(ccc3((col_primary_p1 >> 16) & 0xff,
                                               (col_primary_p1 >> 8) & 0xff,
@@ -75,35 +60,21 @@ using namespace geode::prelude;
                                     visuals.icon_ufo(),
                                     visuals.icon_wave(),
                                     visuals.icon_robot(),
-                                    visuals.icon_spider(),
-                                    glowy
+                                    visuals.icon_spider()
                             };
 
                             Global::get()->players[player_join.p_id()] = p;
-
-                            fmt::print("added to playlayer-\n");
                         });
 
                     } else if (gdmp_packet->has_player_move()) {
-                        //fmt::print("*player moving noises*\n");
 
                         auto player_move = gdmp_packet->player_move();
-                        fmt::print("-> player id {} moved to P1[{} {}] P2[{} {}]\n", player_move.p_id(),
-                                   player_move.pos_p1().pos_x(),player_move.pos_p1().pos_y(),
-                                   player_move.pos_p2().pos_x(), player_move.pos_p2().pos_y());
-
-                        // todo: handle move
 
                         auto global = Global::get();
 
                         auto p_id = player_move.p_id();
                         auto playLayer = GameManager::sharedState()->getPlayLayer();
-                        if (!playLayer) {
-                            fmt::print("playlayer is null\n");
-                            continue;
-                        }
-                        if (!global->players.contains(p_id)) {
-                            fmt::print("player doesn't exist\n");
+                        if (!playLayer || !global->players.contains(p_id)) {
                             continue;
                         }
 
@@ -163,10 +134,8 @@ using namespace geode::prelude;
                         auto player_move = gdmp_packet->player_move();
                         auto p_id = player_move.p_id();
 
-                        if (!global->players.contains(p_id)) {
-                            fmt::print("player doesn't exist\n");
+                        if (!global->players.contains(p_id))
                             continue;
-                        }
 
                         auto p = global->players[p_id];
 
@@ -216,8 +185,6 @@ $execute {
 
     Global* g = Global::get();
     g->host = enet_host_create(nullptr, 1, 1, 0, 0);
-
-    fmt::print("attempting to connect to server!!\n");
 
     // real..
     std::thread eventThread(&pollEvent);

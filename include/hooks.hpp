@@ -27,8 +27,6 @@ class $modify(MenuLayer) {
     void onMoreGames(cocos2d::CCObject* p0) {
         Global *g = Global::get();
 
-        fmt::print("meow meeow!\n");
-
         ENetAddress addr;
         enet_address_set_host(&addr, "127.0.0.1");
         addr.port = 34154;
@@ -51,12 +49,10 @@ class $modify(PlayLayer) {
             fmt::print("level id {}\n", level->m_levelID.value());
 
             if (global->connected) {
-                fmt::print("making join packet!!");
                 int32_t level_id = level->m_levelID;
 
                 gdmp::Packet packet;
 
-                fmt::print("getting visuals!!\n");
                 auto gameManager = GameManager::sharedState();
 
                 auto visuals = new gdmp::PlayerVisuals();
@@ -92,11 +88,7 @@ class $modify(PlayLayer) {
 
                 colors->set_glowy(gameManager->getPlayerGlow());
 
-                fmt::print("meow!!\n");
                 visuals->set_allocated_colors(colors);
-                fmt::print("meow!! return visuals\n");
-
-                fmt::print("got visuals!!\n");
 
                 gdmp::Room room;
                 room.set_level_id(level_id);
