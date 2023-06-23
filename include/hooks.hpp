@@ -1,6 +1,5 @@
 #include "include.hpp"
 #include "utils.hpp"
-#include "proto/packet.pb.h"
 
 std::vector<std::function<void()>> functionQueue;
 std::mutex threadMutex;
@@ -99,17 +98,13 @@ class $modify(PlayLayer) {
 
                 packet.set_allocated_player_join(player_join);
 
-                // ugly shit stupid code vvvvv -----
                 size_t size = packet.ByteSizeLong();
-                void *buffer = malloc(size); /* manual memory allocation my beloved <3 */
+                void *buffer = malloc(size);
                 packet.SerializeToArray(buffer, size);
-                auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
-                free(buffer); /* I AM FREEEEEEEEEEEEEE */
+                auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
+                free(buffer);
 
-                enet_peer_send(global->peer, 0, enetpacket);
-                //enet_packet_destroy(enetpacket);
-                /* this causes the packet to not get sent fully because you're not supposed to call enet_packet_destroy
-                right after sending the packet */
+                enet_peer_send(global->peer, 0, enetPacket);
             }
 
             return true;
@@ -137,10 +132,10 @@ class $modify(PlayLayer) {
                 size_t size = packet.ByteSizeLong();
                 void *buffer = malloc(size);
                 packet.SerializeToArray(buffer, size);
-                auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
+                auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
                 free(buffer);
 
-                enet_peer_send(global->peer, 0, enetpacket);
+                enet_peer_send(global->peer, 0, enetPacket);
             }
 
             PlayLayer::onQuit();
@@ -172,13 +167,12 @@ class $modify(PlayLayer) {
 
             packet.set_allocated_player_move(player_move);
 
-            // ugly shit stupid code vvvvv -----
             size_t size = packet.ByteSizeLong();
-            void *buffer = malloc(size); /* manual memory allocation my beloved <3 */
+            void *buffer = malloc(size);
             packet.SerializeToArray(buffer, size);
-            auto enetpacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
-            free(buffer); /* I AM FREEEEEEEEEEEEEE */
+            auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
+            free(buffer);
 
-            enet_peer_send(global->peer, 0, enetpacket);
+            enet_peer_send(global->peer, 0, enetPacket);
         }
 };

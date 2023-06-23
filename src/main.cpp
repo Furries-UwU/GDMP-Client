@@ -1,8 +1,6 @@
 #include "include.hpp"
 #include "global.hpp"
 #include "hooks.hpp"
-#include "net.hpp"
-#include "proto/packet.pb.h"
 
 #if __APPLE__ && TARGET_OS_MAC
 #include "thread"
@@ -17,20 +15,18 @@ using namespace geode::prelude;
         while (enet_host_service(Global::get()->host, &event, 0) > 0) {
             switch (event.type) {
                 case ENET_EVENT_TYPE_RECEIVE: {
-
                     auto* gdmp_packet = new gdmp::Packet();
                     gdmp_packet->ParseFromArray(event.packet->data, event.packet->dataLength);
 
                     if (gdmp_packet->has_player_join()) {
                         fmt::print("a player has suddenly appeared!!\n");
-
                         auto player_join = gdmp_packet->player_join();
 
                         executeInGDThread([player_join]() {
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
                             if (!playLayer) return;
 
-                            auto visuals = player_join.visual();
+                            const auto& visuals = player_join.visual();
 
                             auto p1 = SimplePlayer::create(visuals.icon_cube());
                             p1->setPosition({0, 0});
@@ -67,7 +63,6 @@ using namespace geode::prelude;
                         });
 
                     } else if (gdmp_packet->has_player_move()) {
-
                         auto player_move = gdmp_packet->player_move();
 
                         auto global = Global::get();

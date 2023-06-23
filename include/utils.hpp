@@ -1,5 +1,4 @@
 #include "include.hpp"
-#include "packet.pb.h"
 
 enum Gamemode:uint8_t {
     NONE = 0,
