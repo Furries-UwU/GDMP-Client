@@ -53,6 +53,9 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
         case gdmp::GameMode::WAVE:   return Gamemode::WAVE;
         case gdmp::GameMode::ROBOT:  return Gamemode::ROBOT;
         case gdmp::GameMode::SPIDER: return Gamemode::SPIDER;
+        case gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_:
+        case gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_:
+            return Gamemode::CUBE;
     }
 
     return Gamemode::CUBE;
