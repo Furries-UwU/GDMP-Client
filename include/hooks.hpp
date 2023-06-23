@@ -87,9 +87,13 @@ class $modify(PlayLayer) {
         }
 
         void onQuit() {
-            PlayLayer::onQuit();
+            Global* global = Global::get();
+            for (auto &item: global->players) {
+                item.second.p1->removeMeAndCleanup();
+            }
+            global->players.clear();
 
-            fmt::print("quit!\n");
+            PlayLayer::onQuit();
         }
 
         void update(float p0) {
