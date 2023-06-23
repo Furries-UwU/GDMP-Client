@@ -45,7 +45,7 @@ using namespace geode::prelude;
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
-
+                            auto glowy = visuals.colors().glowy();
 
                             fmt::print("RECV SETCOLOR PRIMARY {}: {} {} {}\n",
                                        col_primary_p1,
@@ -62,6 +62,7 @@ using namespace geode::prelude;
                                                     (col_secondary_p1 >> 8) & 0xff,
                                                     col_secondary_p1  & 0xff
                             ));
+                            p1->setGlowOutline(glowy);
 
                             playLayer->getObjectLayer()->addChild(p1);
 
@@ -75,6 +76,7 @@ using namespace geode::prelude;
                                     visuals.icon_wave(),
                                     visuals.icon_robot(),
                                     visuals.icon_spider(),
+                                    glowy
                             };
 
                             Global::get()->players[player_join.p_id()] = p;

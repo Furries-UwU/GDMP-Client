@@ -13,6 +13,7 @@ struct Player {
     uint32_t wave   = 0;
     uint32_t robot  = 0;
     uint32_t spider = 0;
+    bool glow       = 0;
 };
 
 class Global {
