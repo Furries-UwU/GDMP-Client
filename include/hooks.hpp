@@ -62,9 +62,11 @@ class $modify(PlayLayer) {
 
                 auto visuals = new gdmp::PlayerVisuals();
                 visuals->set_icon_cube(gameManager->getPlayerFrame());
+                visuals->set_icon_ship(gameManager->getPlayerShip());
                 visuals->set_icon_ball(gameManager->getPlayerBall());
                 visuals->set_icon_ufo(gameManager->getPlayerBird());
                 visuals->set_icon_wave(gameManager->getPlayerDart());
+                visuals->set_icon_robot(gameManager->getPlayerRobot());
                 visuals->set_icon_spider(gameManager->getPlayerSpider());
 
                 gdmp::Colors color_p1;
