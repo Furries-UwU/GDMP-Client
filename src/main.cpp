@@ -126,8 +126,8 @@ using namespace geode::prelude;
                         fmt::print(":vanish:\n");
                         auto global = Global::get();
 
-                        auto player_move = gdmp_packet->player_move();
-                        auto p_id = player_move.p_id();
+                        auto player_leave = gdmp_packet->player_leave();
+                        auto p_id = player_leave.p_id();
 
                         if (!global->players.contains(p_id))
                             continue;
