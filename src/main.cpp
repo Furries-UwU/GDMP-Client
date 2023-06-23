@@ -42,12 +42,42 @@ using namespace geode::prelude;
 
                             auto p1 = SimplePlayer::create(visuals.icon_cube());
                             p1->setPosition({0, 0});
-                            p1->setColor(cc3x(visuals.colors().color_p1().primary()));
-                            p1->setSecondColor(cc3x(visuals.colors().color_p1().secondary()));
+
+                            auto col_primary_p1 = visuals.colors().color_p1().primary();
+                            auto col_secondary_p1 = visuals.colors().color_p1().secondary();
+
+
+                            fmt::print("RECV SETCOLOR PRIMARY {}: {} {} {}\n",
+                                       col_primary_p1,
+                                       (col_primary_p1 >> 16) & 0xff,
+                                       (col_primary_p1 >> 8) & 0xff,
+                                       col_primary_p1  & 0xff
+                                       );
+
+                            p1->setColor(ccc3((col_primary_p1 >> 16) & 0xff,
+                                              (col_primary_p1 >> 8) & 0xff,
+                                              col_primary_p1  & 0xff
+                                              ));
+                            p1->setSecondColor(ccc3((col_secondary_p1 >> 16) & 0xff,
+                                                    (col_secondary_p1 >> 8) & 0xff,
+                                                    col_secondary_p1  & 0xff
+                            ));
 
                             playLayer->getObjectLayer()->addChild(p1);
 
-                            Global::get()->players[player_join.p_id()] = p1;
+                            Player p {
+                                    p1,
+                                    nullptr,
+                                    visuals.icon_cube(),
+                                    visuals.icon_ship(),
+                                    visuals.icon_ball(),
+                                    visuals.icon_ufo(),
+                                    visuals.icon_wave(),
+                                    visuals.icon_robot(),
+                                    visuals.icon_spider(),
+                            };
+
+                            Global::get()->players[player_join.p_id()] = p;
 
                             fmt::print("added to playlayer-\n");
                         });
@@ -75,7 +105,9 @@ using namespace geode::prelude;
                             continue;
                         }
 
-                        auto p1 = global->players[p_id];
+                        auto p = global->players[p_id];
+
+                        auto p1 = p.p1;
 
                         auto pos_p1_x = player_move.pos_p1().pos_x();
                         auto pos_p1_y = player_move.pos_p1().pos_y();
@@ -83,6 +115,36 @@ using namespace geode::prelude;
                         auto scale_p1 = player_move.pos_p1().scale();
                         auto iconType_p1 = getIconType(getGamemodeFromGameMode(player_move.gamemode_p1()));
                         auto iconID_p1 = 0;
+                        switch (iconType_p1) {
+                            case IconType::Cube: {
+                                iconID_p1 = p.cube;
+                                break;
+                            }
+                            case IconType::Ship: {
+                                iconID_p1 = p.ship;
+                                break;
+                            }
+                            case IconType::Ball: {
+                                iconID_p1 = p.ball;
+                                break;
+                            }
+                            case IconType::Ufo: {
+                                iconID_p1 = p.ufo;
+                                break;
+                            }
+                            case IconType::Wave:
+                                iconID_p1 = p.wave;
+                                break;
+                            case IconType::Robot:
+                                iconID_p1 = p.robot;
+                                break;
+                            case IconType::Spider:
+                                iconID_p1 = p.spider;
+                                break;
+                            case IconType::DeathEffect:
+                            case IconType::Special:
+                                break;
+                        }
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 

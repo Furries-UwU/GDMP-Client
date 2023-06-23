@@ -108,8 +108,20 @@ gdmp::PlayerVisuals* getPlayerVisualData(PlayerObject *p1, PlayerObject *p2) {
     gdmp::Colors color_p1;
     gdmp::Colors color_p2;
 
+#if __APPLE__ && TARGET_OS_MAC
+    // PlayerObject::getSecondaryColor has an binding on mac but not anywhere else and i cba to find it lmao
+    auto secondaryColor = getIntFromCCColor(p1->getSecondaryColor());
+#else
+    uint32_t secondaryColor = 0;
+
+    // hope this works c:
+    if (p1->m_iconSprite) {
+        secondaryColor = getIntFromCCColor(p1->m_iconSprite->getColor());
+    }
+#endif
+
     color_p1.set_primary(getIntFromCCColor(p1->getColor()));
-    color_p1.set_secondary(getIntFromCCColor(p1->getColor()));
+    color_p1.set_secondary(secondaryColor);
 
     auto colors = new gdmp::ColorInfo();
     colors->set_allocated_color_p1(&color_p1);
