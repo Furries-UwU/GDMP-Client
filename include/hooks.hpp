@@ -61,7 +61,7 @@ class $modify(PlayLayer) {
         if (global->connected) {
             int32_t level_id = level->m_levelID;
 
-            gdmp::Packet packet;
+            auto packet = new gdmp::Packet();
 
             auto gameManager = GameManager::sharedState();
 
@@ -109,11 +109,11 @@ class $modify(PlayLayer) {
             player_join->set_allocated_room(&room);
             player_join->set_allocated_visual(visuals);
 
-            packet.set_allocated_player_join(player_join);
+            packet->set_allocated_player_join(player_join);
 
-            size_t size = packet.ByteSizeLong();
+            size_t size = packet->ByteSizeLong();
             void *buffer = malloc(size);
-            packet.SerializeToArray(buffer, size);
+            packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
             free(buffer);
 
@@ -132,7 +132,7 @@ class $modify(PlayLayer) {
 
         if (global->connected) {
             int32_t level_id = this->m_level->m_levelID;
-            gdmp::Packet packet;
+            auto packet = new gdmp::Packet();
 
             gdmp::Room room;
             room.set_level_id(level_id);
@@ -140,11 +140,11 @@ class $modify(PlayLayer) {
             auto leavePacket = new gdmp::PlayerLeavePacket();
             leavePacket->set_allocated_room(&room);
 
-            packet.set_allocated_player_leave(leavePacket);
+            packet->set_allocated_player_leave(leavePacket);
 
-            size_t size = packet.ByteSizeLong();
+            size_t size = packet->ByteSizeLong();
             void *buffer = malloc(size);
-            packet.SerializeToArray(buffer, size);
+            packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
             free(buffer);
 
@@ -160,7 +160,7 @@ class $modify(PlayLayer) {
         Global *global = Global::get();
 
         if (global->connected) {
-            gdmp::Packet packet;
+            auto packet = new gdmp::Packet();
 
             // player move
             auto player_move = new gdmp::PlayerMovePacket();
@@ -179,11 +179,11 @@ class $modify(PlayLayer) {
                 player_move->set_gamemode_p2(gameMode2);
             }
 
-            packet.set_allocated_player_move(player_move);
+            packet->set_allocated_player_move(player_move);
 
-            size_t size = packet.ByteSizeLong();
+            size_t size = packet->ByteSizeLong();
             void *buffer = malloc(size);
-            packet.SerializeToArray(buffer, size);
+            packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size,
                                                  ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
             free(buffer);
