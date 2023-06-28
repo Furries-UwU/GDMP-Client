@@ -70,12 +70,13 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
             return Gamemode::ROBOT;
         case gdmp::GameMode::SPIDER:
             return Gamemode::SPIDER;
-        case gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_:
-        case gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_:
+            // default include:
+            // gdmp::GameMode::CUBE
+            // gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_
+            // gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_
+        default:
             return Gamemode::CUBE;
     }
-
-    return Gamemode::CUBE;
 }
 
 IconType getIconType(Gamemode gamemode) {
