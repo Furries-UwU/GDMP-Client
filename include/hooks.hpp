@@ -25,6 +25,29 @@ class $modify(cocos2d::CCScheduler) {
 };
 
 class $modify(MenuLayer) {
+    bool init() {
+        if (!MenuLayer::init()) return false;
+
+        auto director = CCDirector::sharedDirector();
+        auto size = director->getWinSize();
+
+        auto buttonSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
+        buttonSprite->setFlipX(true);
+
+        auto button = CCMenuItemSpriteExtra::create(
+                buttonSprite,
+                this,
+                menu_selector(MultiplayerLayer::switchToCustomLayerButton));
+
+        auto menu = CCMenu::create();
+        menu->addChild(button);
+        menu->setPosition(size.width - 40, size.height - 40);
+
+        this->addChild(menu);
+
+        return true;
+    }
+
     void onMoreGames(cocos2d::CCObject *p0) {
         Global *g = Global::get();
 
