@@ -39,8 +39,11 @@ jobs:
         run: |
           cd ../
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{github.workspace}}/../cli"
-          find cli -name "*.zip" -type f -delete
           echo "${{ github.workspace }}/../cli" >> $GITHUB_PATH
+
+          if [ "$RUNNER_OS" != "Windows" ]; then
+            chmod +x cli/geode
+          fi
 
       - name: Geode SDK
         run: |
