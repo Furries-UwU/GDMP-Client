@@ -41,12 +41,7 @@ if (NOT protobuf_ADDED)
     find_package(Protobuf REQUIRED)
 endif ()
 
-# Use GLOB_RECURSE instead of GLOB
-# to recursively add all source files
-# under src/
-file(GLOB SOURCES
-        src/*.cpp
-        )
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS src/*.cpp src/*.c)
 
 add_subdirectory(external/enet)
 add_library(${PROJECT_NAME} SHARED ${SOURCES} proto/packet.proto)
