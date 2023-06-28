@@ -24,12 +24,14 @@ jobs:
         with:
           submodules: recursive
 
+      - run: echo ${{matrix.config.os_identifier}}
+
       - name: Download CLI
         uses: robinraju/release-downloader@v1
         with:
           repository: geode-sdk/cli
-          latest: true
-          fileName: "*-${{ matrix.config.os_identifier }}.zip"
+          tag: "v2.4.0"
+          fileName: "*-${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
           out-file-path: "cli"
