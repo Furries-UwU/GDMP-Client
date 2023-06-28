@@ -28,10 +28,11 @@ jobs:
         uses: robinraju/release-downloader@v1
         with:
           repository: geode-sdk/cli
-          tag: "v2.4.0"
-          fileName: "*-${{matrix.config.os_identifier}}.zip"
+          latest: true
+          fileName: "geode-cli-v*-${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
+          extract: true
           out-file-path: "../cli"
           token: ${{ secrets.GITHUB_TOKEN }}
 
