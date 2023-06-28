@@ -47,7 +47,7 @@ jobs:
 
       - name: Geode SDK
         run: |
-          geode sdk install --force
+          yes | geode sdk install --force
 
       - name: Configure Geode
         run: |
