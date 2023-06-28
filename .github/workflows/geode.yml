@@ -47,7 +47,12 @@ jobs:
 
       - name: Geode SDK
         run: |
-          geode sdk install
+          geode sdk install --force
+
+      - name: Configure Geode
+        run: |
+          geode profile add -n Default "${{github.workspace}}/../dummy"
+          geode profile switch Default
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
