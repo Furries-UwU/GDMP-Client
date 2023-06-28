@@ -39,7 +39,7 @@ jobs:
         run: |
           cd ../
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{github.workspace}}/../cli"
-          rm ".cli/*-${{ matrix.config.os_identifier }}.zip"
+          rm .cli/*.zip
           echo "${{ github.workspace }}/../cli" >> $GITHUB_PATH
 
       - name: Geode SDK
