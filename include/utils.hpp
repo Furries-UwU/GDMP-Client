@@ -1,6 +1,8 @@
+#pragma once
+
 #include "include.hpp"
 
-enum Gamemode:uint8_t {
+enum Gamemode : uint8_t {
     NONE = 0,
     CUBE = 1,
     SHIP = 2,
@@ -12,17 +14,17 @@ enum Gamemode:uint8_t {
 };
 
 Gamemode getGamemodeFromPlayer(PlayerObject *player) {
-    if(player->m_isShip) {
+    if (player->m_isShip) {
         return Gamemode::SHIP;
-    } else if(player->m_isBall) {
+    } else if (player->m_isBall) {
         return Gamemode::BALL;
-    } else if(player->m_isBird) {
+    } else if (player->m_isBird) {
         return Gamemode::UFO;
-    } else if(player->m_isDart) {
+    } else if (player->m_isDart) {
         return Gamemode::WAVE;
-    } else if(player->m_isRobot) {
+    } else if (player->m_isRobot) {
         return Gamemode::ROBOT;
-    } else if(player->m_isSpider) {
+    } else if (player->m_isSpider) {
         return Gamemode::SPIDER;
     } else {
         return Gamemode::CUBE;
@@ -31,27 +33,43 @@ Gamemode getGamemodeFromPlayer(PlayerObject *player) {
 
 gdmp::GameMode getGameModeFromGamemode(Gamemode gamemode) {
     switch (gamemode) {
-        case NONE:   return gdmp::GameMode::NONE;
-        case CUBE:   return gdmp::GameMode::CUBE;
-        case SHIP:   return gdmp::GameMode::SHIP;
-        case BALL:   return gdmp::GameMode::BALL;
-        case UFO:    return gdmp::GameMode::UFO;
-        case WAVE:   return gdmp::GameMode::WAVE;
-        case ROBOT:  return gdmp::GameMode::ROBOT;
-        case SPIDER: return gdmp::GameMode::SPIDER;
+        case NONE:
+            return gdmp::GameMode::NONE;
+        case CUBE:
+            return gdmp::GameMode::CUBE;
+        case SHIP:
+            return gdmp::GameMode::SHIP;
+        case BALL:
+            return gdmp::GameMode::BALL;
+        case UFO:
+            return gdmp::GameMode::UFO;
+        case WAVE:
+            return gdmp::GameMode::WAVE;
+        case ROBOT:
+            return gdmp::GameMode::ROBOT;
+        case SPIDER:
+            return gdmp::GameMode::SPIDER;
     }
 }
 
 Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
     switch (gamemode) {
-        case gdmp::GameMode::NONE:   return Gamemode::NONE;
-        case gdmp::GameMode::CUBE:   return Gamemode::CUBE;
-        case gdmp::GameMode::SHIP:   return Gamemode::SHIP;
-        case gdmp::GameMode::BALL:   return Gamemode::BALL;
-        case gdmp::GameMode::UFO:    return Gamemode::UFO;
-        case gdmp::GameMode::WAVE:   return Gamemode::WAVE;
-        case gdmp::GameMode::ROBOT:  return Gamemode::ROBOT;
-        case gdmp::GameMode::SPIDER: return Gamemode::SPIDER;
+        case gdmp::GameMode::NONE:
+            return Gamemode::NONE;
+        case gdmp::GameMode::CUBE:
+            return Gamemode::CUBE;
+        case gdmp::GameMode::SHIP:
+            return Gamemode::SHIP;
+        case gdmp::GameMode::BALL:
+            return Gamemode::BALL;
+        case gdmp::GameMode::UFO:
+            return Gamemode::UFO;
+        case gdmp::GameMode::WAVE:
+            return Gamemode::WAVE;
+        case gdmp::GameMode::ROBOT:
+            return Gamemode::ROBOT;
+        case gdmp::GameMode::SPIDER:
+            return Gamemode::SPIDER;
         case gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_:
         case gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_:
             return Gamemode::CUBE;

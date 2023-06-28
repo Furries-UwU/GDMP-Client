@@ -3,7 +3,9 @@
 #include "hooks.hpp"
 
 #if __APPLE__ && TARGET_OS_MAC
+
 #include "thread"
+
 #endif
 
 using namespace geode::prelude;
@@ -15,7 +17,7 @@ using namespace geode::prelude;
         while (enet_host_service(Global::get()->host, &event, 0) > 0) {
             switch (event.type) {
                 case ENET_EVENT_TYPE_RECEIVE: {
-                    auto* gdmp_packet = new gdmp::Packet();
+                    auto *gdmp_packet = new gdmp::Packet();
                     gdmp_packet->ParseFromArray(event.packet->data, event.packet->dataLength);
 
                     if (gdmp_packet->has_player_join()) {
@@ -26,7 +28,7 @@ using namespace geode::prelude;
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
                             if (!playLayer) return;
 
-                            const auto& visuals = player_join.visual();
+                            const auto &visuals = player_join.visual();
 
                             auto p1 = SimplePlayer::create(visuals.icon_cube());
                             p1->setPosition({0, 0});
@@ -37,17 +39,17 @@ using namespace geode::prelude;
 
                             p1->setColor(ccc3((col_primary_p1 >> 16) & 0xff,
                                               (col_primary_p1 >> 8) & 0xff,
-                                              col_primary_p1  & 0xff
-                                              ));
+                                              col_primary_p1 & 0xff
+                            ));
                             p1->setSecondColor(ccc3((col_secondary_p1 >> 16) & 0xff,
                                                     (col_secondary_p1 >> 8) & 0xff,
-                                                    col_secondary_p1  & 0xff
+                                                    col_secondary_p1 & 0xff
                             ));
                             p1->setGlowOutline(glowy);
 
                             playLayer->getObjectLayer()->addChild(p1);
 
-                            Player p {
+                            Player p{
                                     p1,
                                     nullptr,
                                     visuals.icon_cube(),
@@ -117,7 +119,7 @@ using namespace geode::prelude;
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
                         executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, iconType_p1, p1]() {
-                            p1->setPosition({ pos_p1_x, pos_p1_y });
+                            p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
                             p1->updatePlayerFrame(iconID_p1, iconType_p1);
@@ -178,7 +180,7 @@ $execute {
     // make sure to clean up!!
     atexit(enet_deinitialize);
 
-    Global* g = Global::get();
+    Global *g = Global::get();
     g->host = enet_host_create(nullptr, 1, 1, 0, 0);
 
     // real..
