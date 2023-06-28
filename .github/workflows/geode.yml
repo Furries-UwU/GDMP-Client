@@ -32,7 +32,6 @@ jobs:
           fileName: "geode-cli-v*-${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
-          extract: true
           out-file-path: "../cli"
           token: ${{ secrets.GITHUB_TOKEN }}
 
