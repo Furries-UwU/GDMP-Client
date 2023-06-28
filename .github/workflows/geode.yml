@@ -37,7 +37,10 @@ jobs:
 
       - name: Geode CLI
         run: |
-          cd ../cli
+          ls -a
+          cd ../
+          ls -a
+          cd cli
           ls -a
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o cli
           echo "$PWD/cli" >> $GITHUB_PATH
