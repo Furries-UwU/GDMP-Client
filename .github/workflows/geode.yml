@@ -24,11 +24,11 @@ jobs:
       - name: Geode CLI
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-            mkdir /Users/Shared/Geode
+            mkdir -p /Users/Shared/Geode
             cd /Users/Shared/Geode
 
             mkdir cli
-            git clone https://github.com/geode-sdk/cli --branch v2.4.0 --recursive cli-temp
+            git clone https://github.com/geode-sdk/cli --branch $GEODE_CLI_VERSION --recursive cli-temp
             cd cli-temp
             export OPENSSL_STATIC=1
             cargo build --release
@@ -52,16 +52,16 @@ jobs:
       - name: Geode SDK
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-           mkdir /Users/Shared/Geode
+           mkdir -p /Users/Shared/Geode
            cd /Users/Shared/Geode
              
-           git clone https://github.com/geode-sdk/geode --branch ${{env.GEODE_SDK_VERSION}} --recursive sdk
+           git clone https://github.com/geode-sdk/geode --branch $GEODE_SDK_VERSION --recursive sdk
            cd sdk
 
            cmake -B build -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DGEODE_DEBUG=Off -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCLI_PATH="/Users/Shared/Geode/cli"  -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
            cmake --build . --config Release --parallel
 
-           mv ./bin/nightly/Geode.dylib ./bin/nightly/GeodeBootstrapper.dylib ./loader/include/link/libfmod.dylib ./bin/${{env.GEODE_SDK_VERSION}}
+           mv ./bin/nightly/Geode.dylib ./bin/nightly/GeodeBootstrapper.dylib ./loader/include/link/libfmod.dylib ./bin/$GEODE_SDK_VERSION
            rm -rf ./bin/nightly
 
            echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
