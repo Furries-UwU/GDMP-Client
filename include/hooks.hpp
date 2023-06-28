@@ -48,23 +48,6 @@ class $modify(MenuLayer) {
 
         return true;
     }
-
-    void onMoreGames(cocos2d::CCObject *p0) {
-        Global *g = Global::get();
-
-        if (g->connected) enet_peer_disconnect(g->peer, 0);
-
-        ENetAddress addr;
-        enet_address_set_host(&addr, "127.0.0.1");
-        addr.port = 34154;
-
-        g->peer = enet_host_connect(g->host, &addr, 1, 0);
-        if (!g->peer) {
-            fmt::print("failed to connect to server!!\n");
-            return;
-        }
-        fmt::print("peer id: {} {}\n", g->peer->incomingPeerID, g->peer->outgoingPeerID);
-    }
 };
 
 class $modify(PlayLayer) {

@@ -15,17 +15,19 @@ void MultiplayerLayer::connectButtonCallback(CCObject *object) {
 
     if (global->connected) enet_peer_disconnect(global->peer, 0);
 
-    ENetAddress address;
-    enet_address_set_host(&address, std::string(ipInput->getString()).c_str());
+    ENetAddress addr;
+    enet_address_set_host(&addr, ipInput->getString());
+    addr.port = std::stoi(portInput->getString());
 
-    address.port = std::stoi(portInput->getString());
-
-    global->peer = enet_host_connect(global->host, &address, 1, 0);
+    global->peer = enet_host_connect(global->host, &addr, 1, 0);
     if (!global->peer) {
-        fmt::print(stderr,
-                   "No available peers for initiating an ENet connection.\n");
+        FLAlertLayer::create(
+                "Error",
+                "Failed to connect to the server",
+                "OK"
+        )->show();
         return;
-    }
+    };
 }
 
 MultiplayerLayer *MultiplayerLayer::create() {
