@@ -24,8 +24,6 @@ jobs:
         with:
           submodules: recursive
 
-      - run: echo ${{matrix.config.os_identifier}}
-
       - name: Download CLI
         uses: robinraju/release-downloader@v1
         with:
@@ -35,6 +33,7 @@ jobs:
           tarBall: false
           zipBall: false
           out-file-path: "cli"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Unzip CLI
         run: |
