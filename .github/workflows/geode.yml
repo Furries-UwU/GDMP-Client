@@ -39,6 +39,7 @@ jobs:
         run: |
           cd ../
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{github.workspace}}/../cli"
+          ls -a cli
           rm "cli/*-${{ matrix.config.os_identifier }}.zip"
           echo "${{ github.workspace }}/../cli" >> $GITHUB_PATH
 
