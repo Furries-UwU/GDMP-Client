@@ -38,6 +38,7 @@ jobs:
 
       - name: Unzip CLI
         run: |
+          ls
           7z x "${{ github.workspace }}/cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{ github.workspace }}/cli"
 
       - name: Add CLI to Path
