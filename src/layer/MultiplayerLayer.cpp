@@ -54,10 +54,20 @@ bool MultiplayerLayer::init() {
                            director->getWinSize().height - 25));
     addChild(label);
 
-    ipInput = CCTextInputNode::create(100, 100, "IP Address", "bigFont.fnt");
+    auto ipLabel = CCLabelBMFont::create("IP", "bigFont.fnt");
+    ipLabel->setPosition(ccp((director->getWinSize().width / 2) - 150,
+                             (director->getWinSize().height / 2) + 50));
+    addChild(ipLabel);
+
+    auto portLabel = CCLabelBMFont::create("Port", "bigFont.fnt");
+    portLabel->setPosition(ccp((director->getWinSize().width / 2) + 150,
+                               (director->getWinSize().height / 2) + 50));
+    addChild(portLabel);
+
+    ipInput = CCTextInputNode::create(100, 100, "IP", "bigFont.fnt");
     ipInput->setPosition(ccp((director->getWinSize().width / 2) - 150,
                              director->getWinSize().height / 2));
-    ipInput->setAllowedChars("0123456789.");
+    ipInput->setAllowedChars("0123456789abcdefghijklmnopqrstuvwxyz.-");
     ipInput->setString("127.0.0.1");
     addChild(ipInput);
 
@@ -70,7 +80,7 @@ bool MultiplayerLayer::init() {
 
     connectionStatus = CCLabelBMFont::create(
             fmt::format("Status: {}", global->connected ? "Connected" : "Not connected").c_str(), "bigFont.fnt");
-    connectionStatus->setPosition(ccp((director->getWinSize().width / 2), (director->getWinSize().height / 2) - 100));
+    connectionStatus->setPosition(ccp((director->getWinSize().width / 2), (director->getWinSize().height / 2) - 120));
     connectionStatus->setScaleX(0.5);
     connectionStatus->setScaleY(0.5);
     addChild(connectionStatus);
@@ -117,12 +127,12 @@ bool MultiplayerLayer::init() {
 
     menu = CCMenu::create();
     menu->addChild(connectButton);
-    menu->setPosition({(winSize.width / 2) - 50, winSize.height / 2 - 55});
+    menu->setPosition({(winSize.width / 2) - 50, winSize.height / 2 - 75});
     addChild(menu);
 
     menu = CCMenu::create();
     menu->addChild(disconnectButton);
-    menu->setPosition({(winSize.width / 2) + 50, winSize.height / 2 - 55});
+    menu->setPosition({(winSize.width / 2) + 50, winSize.height / 2 - 75});
     addChild(menu);
 
     setKeypadEnabled(true);
