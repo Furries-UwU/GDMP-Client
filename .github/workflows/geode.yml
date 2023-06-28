@@ -25,23 +25,21 @@ jobs:
           submodules: recursive
 
       - name: Download Geode CLI
-        uses: robinraju/release-downloader@v1
+        uses: robinraju/release-downloader@v1.5
         with:
           repository: geode-sdk/cli
           latest: true
           fileName: "*-${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
-          out-file-path: "cli"
+          out-file-path: "../cli"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Geode CLI
         run: |
-          mv cli ../
           cd ../
-          cd cli
-          ls -a
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o cli
+          rm "cli/*-${{ matrix.config.os_identifier }}.zip"
           echo "$PWD/cli" >> $GITHUB_PATH
 
       - name: Geode SDK
