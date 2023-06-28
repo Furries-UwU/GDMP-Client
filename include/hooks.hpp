@@ -1,5 +1,6 @@
 #pragma once
 
+#include "layer/MultiplayerLayer.hpp"
 #include "include.hpp"
 #include "utils.hpp"
 
@@ -28,10 +29,10 @@ class $modify(MenuLayer) {
     bool init() {
         if (!MenuLayer::init()) return false;
 
-        auto director = CCDirector::sharedDirector();
+        auto director = cocos2d::CCDirector::sharedDirector();
         auto size = director->getWinSize();
 
-        auto buttonSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
+        auto buttonSprite = cocos2d::CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
         buttonSprite->setFlipX(true);
 
         auto button = CCMenuItemSpriteExtra::create(
@@ -39,7 +40,7 @@ class $modify(MenuLayer) {
                 this,
                 menu_selector(MultiplayerLayer::switchToCustomLayerButton));
 
-        auto menu = CCMenu::create();
+        auto menu = cocos2d::CCMenu::create();
         menu->addChild(button);
         menu->setPosition(size.width - 40, size.height - 40);
 
