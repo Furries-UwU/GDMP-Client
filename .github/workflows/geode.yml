@@ -42,12 +42,18 @@ jobs:
           echo "${{ github.workspace }}/../cli" >> $GITHUB_PATH
 
       - name: Make Geode CLI executable
-        if: ${{runner.os}} == 'macOS'
+        if: runner.os == 'macOS'
         run: chmod +x ../cli/geode
 
       - name: Geode SDK
+        if: runner.os == 'macOS'
         run: |
-          yes | geode sdk install --force
+          geode sdk install --force /Users/Shared/Geode/sdk
+
+      - name: Geode SDK
+        if: runner.os == 'Windows'
+        run: |
+            ../cli/geode sdk install --force
 
       - name: Configure Geode
         run: |
