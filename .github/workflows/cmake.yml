@@ -30,6 +30,11 @@ jobs:
             git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
             echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
          elif [ "$RUNNER_OS" == "Windows" ]; then
+              echo "$RUNNER_OS not supported"
+              exit 1
+         elif [ "$RUNNER_OS" == "Linux" ]; then
+              echo "$RUNNER_OS not supported"
+              exit 1
          else
               echo "$RUNNER_OS not supported"
               exit 1
