@@ -65,7 +65,7 @@ bool MultiplayerLayer::init() {
     ipInput->setPosition(ccp((director->getWinSize().width / 2) - 150,
                              director->getWinSize().height / 2));
     ipInput->setAllowedChars("0123456789abcdefghijklmnopqrstuvwxyz.-");
-    ipInput->setString("127.0.0.1");
+    ipInput->setString("rooot.gay");
     addChild(ipInput);
 
     portInput = CCTextInputNode::create(100, 100, "Port", "bigFont.fnt");
