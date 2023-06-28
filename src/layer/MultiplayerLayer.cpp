@@ -7,13 +7,14 @@ using namespace geode::prelude;
 void MultiplayerLayer::disconnectButtonCallback(CCObject *object) {
     Global *global = Global::get();
 
-    if (global->connected) enet_peer_disconnect(global->peer, 0);
+    if (global->peer)
+        return enet_peer_disconnect(global->peer, 0);
 }
 
 void MultiplayerLayer::connectButtonCallback(CCObject *object) {
     Global *global = Global::get();
 
-    if (global->connected) enet_peer_disconnect(global->peer, 0);
+    if (global->peer) enet_peer_disconnect(global->peer, 0);
 
     ENetAddress addr;
     enet_address_set_host(&addr, ipInput->getString());
@@ -21,11 +22,7 @@ void MultiplayerLayer::connectButtonCallback(CCObject *object) {
 
     global->peer = enet_host_connect(global->host, &addr, 1, 0);
     if (!global->peer) {
-        FLAlertLayer::create(
-                "Error",
-                "Failed to connect to the server",
-                "OK"
-        )->show();
+        Notification::create("Failed to connect to the server!", NotificationIcon::Error)->show();
         return;
     };
 }
@@ -64,7 +61,7 @@ bool MultiplayerLayer::init() {
                                (director->getWinSize().height / 2) + 50));
     addChild(portLabel);
 
-    ipInput = CCTextInputNode::create(100, 100, "IP", "bigFont.fnt");
+    ipInput = CCTextInputNode::create(100, 100, "Address", "bigFont.fnt");
     ipInput->setPosition(ccp((director->getWinSize().width / 2) - 150,
                              director->getWinSize().height / 2));
     ipInput->setAllowedChars("0123456789abcdefghijklmnopqrstuvwxyz.-");

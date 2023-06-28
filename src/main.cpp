@@ -147,20 +147,16 @@ using namespace geode::prelude;
                 }
                 case ENET_EVENT_TYPE_CONNECT: {
                     g->connected = true;
-                    fmt::print("connected to port {}\n", Global::get()->host->address.port);
-
-                    //Notification::create("connected!!", NotificationIcon::Error)->show();
                     break;
                 }
                 case ENET_EVENT_TYPE_DISCONNECT: {
                     g->connected = false;
-                    // todo!!
-
+                    g->peer = nullptr;
+                    Notification::create("Disconnected from the server!", NotificationIcon::Error)->show();
                     break;
                 }
                 case ENET_EVENT_TYPE_NONE: {
-                    fmt::print("meow\n");
-                    // :shrug:
+                    break;
                 }
             }
         }
