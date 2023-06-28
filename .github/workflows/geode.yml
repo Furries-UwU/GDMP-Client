@@ -1,21 +1,20 @@
-name: CMake
+name: Geode
 
 on: [push, pull_request]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  # Your Geode Mod Id
+  GEODE_MOD_ID: gay.rooot.gdmp
+  GEODE_SDK_VERSION: v1.0.0-beta.18
+  GEODE_CLI_VERSION: v2.4.0
 
 jobs:
   build:
     strategy:
       matrix:
-        #         os: [macos-latest, windows-latest] # Defining macOS and Windows OS
+        #         os: [macos-latest, windows-latest]
         os: [macos-latest]
 
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -25,10 +24,18 @@ jobs:
       - name: Geode SDK
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-           mkdir -p /Users/Shared/Geode
+           mkdir /Users/Shared/Geode
            cd /Users/Shared/Geode
              
-           git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
+           git clone https://github.com/geode-sdk/geode --branch ${{env.GEODE_SDK_VERSION}} --recursive sdk
+           cd sdk
+
+           cmake -B build -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DGEODE_DEBUG=Off -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCLI_PATH="/Users/Shared/Geode/cli"  -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+           cmake --build . --config Release --parallel
+
+           mv ./bin/nightly/Geode.dylib ./bin/nightly/GeodeBootstrapper.dylib ./loader/include/link/libfmod.dylib ./bin/${{env.GEODE_SDK_VERSION}}
+           rm -rf ./bin/nightly
+
            echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
           elif [ "$RUNNER_OS" == "Windows" ]; then
            echo "$RUNNER_OS not supported"
@@ -45,7 +52,7 @@ jobs:
       - name: Geode CLI
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-            mkdir -p /Users/Shared/Geode
+            mkdir /Users/Shared/Geode
             cd /Users/Shared/Geode
 
             mkdir cli
@@ -70,10 +77,15 @@ jobs:
           fi
 
       - name: Configure CMake
-        # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-        # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        run: cmake --build build --config Release
+
+      - name: Zipping
+        run: cmake --build build --config Release
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{matrix.os}}
+          path: build/${{env.GEODE_MOD_ID}}.geode
