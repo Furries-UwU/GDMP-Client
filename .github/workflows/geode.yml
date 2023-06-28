@@ -58,6 +58,7 @@ jobs:
 
       - name: Configure Geode
         run: |
+          geode config setup
           geode profile add -n Default "${{github.workspace}}/../dummy"
           geode profile switch Default
 
