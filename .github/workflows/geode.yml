@@ -5,77 +5,48 @@ on: [push, pull_request]
 env:
   # Your Geode Mod Id
   GEODE_MOD_ID: gay.rooot.gdmp
-  GEODE_SDK_VERSION: v1.0.0-beta.18
-  GEODE_CLI_VERSION: v2.4.0
 
 jobs:
   build:
     strategy:
       matrix:
-        #         os: [macos-latest, windows-latest]
-        os: [macos-latest]
+        config:
+          #         os: [macos-latest, windows-latest]
+          # os: [macos-latest]
+          - name: windows-latest
+            os_identifier: win
 
-    runs-on: ${{ matrix.os }}
+          - os: macos-latest
+            os_identifier: mac
+
+    runs-on: ${{ matrix.config.os }}
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Configure ccache
-        uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}
+          submodules: recursive
 
-      # TODO: Support for Windows and Linux
-      - name: Geode CLI
+      - name: Download CLI
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: geode-sdk/cli
+          latest: true
+          fileName: "*-${{ matrix.config.os_identifier }}.zip"
+          tarBall: false
+          zipBall: false
+          out-file-path: "cli"
+
+      - name: Unzip CLI
         run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            mkdir -p /Users/Shared/Geode
-            cd /Users/Shared/Geode
-            mkdir cli
-            git clone https://github.com/geode-sdk/cli --branch $GEODE_CLI_VERSION --recursive cli-temp
-            cd cli-temp
-            export OPENSSL_STATIC=1
-            cargo build --release
-            cd ../
-            cp cli-temp/target/Release/geode cli/geode
-            chmod +x cli/geode
-            rm -rf cli-temp
-            echo "PATH=$PATH:/Users/Shared/Geode/cli" >> $GITHUB_ENV
-          elif [ "$RUNNER_OS" == "Windows" ]; then
-            echo "$RUNNER_OS not supported"
-            exit 1
-          elif [ "$RUNNER_OS" == "Linux" ]; then
-            echo "$RUNNER_OS not supported"
-            exit 1
-          else
-            echo "$RUNNER_OS not supported"
-            exit 1
-          fi
-      # TODO: Support for Windows and Linux
+          7z x "${{ github.workspace }}/cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{ github.workspace }}/cli"
+
+      - name: Add CLI to Path
+        run: |
+          echo "${{ github.workspace }}/cli" >> $GITHUB_PATH
+
       - name: Geode SDK
         run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-           PATH="/usr/local/opt/ccache/libexec:$PATH"
-
-           mkdir -p /Users/Shared/Geode
-           cd /Users/Shared/Geode
-             
-           git clone https://github.com/geode-sdk/geode --branch $GEODE_SDK_VERSION --recursive sdk
-           cd sdk
-           cmake -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DGEODE_DEBUG=Off -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCLI_PATH="/Users/Shared/Geode/cli"  -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-           cmake --build build --config Release --parallel
-           echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
-           echo "{\"current-profile\":\"Default\",\"profiles\":[{\"name\":\"Default\",\"gd-path\":\"\"}],\"default-developer\":\"\",\"sdk-nightly\":true}" > /Users/Shared/Geode/config.json
-          elif [ "$RUNNER_OS" == "Windows" ]; then
-           echo "$RUNNER_OS not supported"
-           exit 1
-          elif [ "$RUNNER_OS" == "Linux" ]; then
-           echo "$RUNNER_OS not supported"
-           exit 1
-          else
-               echo "$RUNNER_OS not supported"
-               exit 1
-          fi
+          geode sdk install
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -88,5 +59,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{matrix.os}}
+          name: ${{matrix.config.os_identifier}}
           path: build/${{env.GEODE_MOD_ID}}.geode
