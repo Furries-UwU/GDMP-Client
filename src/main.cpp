@@ -147,6 +147,7 @@ using namespace geode::prelude;
                 }
                 case ENET_EVENT_TYPE_CONNECT: {
                     g->connected = true;
+                    Notification::create("Connected to the server!", NotificationIcon::Success)->show();
                     break;
                 }
                 case ENET_EVENT_TYPE_DISCONNECT: {
