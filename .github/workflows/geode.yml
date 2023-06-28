@@ -9,6 +9,7 @@ env:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         config:
           - os: windows-latest
@@ -18,7 +19,7 @@ jobs:
             os_identifier: mac
 
     runs-on: ${{ matrix.config.os }}
-
+    
     steps:
       - uses: actions/checkout@v3
         with:
@@ -53,7 +54,7 @@ jobs:
       - name: Geode SDK
         if: runner.os == 'Windows'
         run: |
-            ../cli/geode sdk install --force
+            ../cli/geode sdk install --force C:\Users\runneradmin\Documents\Geode
 
       - name: Configure Geode
         run: |
