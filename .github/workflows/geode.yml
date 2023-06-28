@@ -65,6 +65,7 @@ jobs:
            cmake -B build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DGEODE_DEBUG=Off -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCLI_PATH="/Users/Shared/Geode/cli"  -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
            cmake --build build --config Release --parallel
            echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
+           echo "{\"current-profile\":\"\",\"profiles\":[],\"default-developer\":\"\",\"sdk-nightly\":true}" >> /Users/Shared/Geode/config.json
           elif [ "$RUNNER_OS" == "Windows" ]; then
            echo "$RUNNER_OS not supported"
            exit 1
@@ -75,6 +76,7 @@ jobs:
                echo "$RUNNER_OS not supported"
                exit 1
           fi
+
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
