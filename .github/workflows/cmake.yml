@@ -10,29 +10,44 @@ jobs:
   build:
     strategy:
       matrix:
-#         os: [macos-latest, windows-latest] # Defining macOS and Windows OS
+        #         os: [macos-latest, windows-latest] # Defining macOS and Windows OS
         os: [macos-latest]
-  
+
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
-    
-    # TODO: Support for Windows and Linux
-    - name: Geode SDK
-      run: |
-         if [ "$RUNNER_OS" == "macOS" ]; then
+      - uses: actions/checkout@v3
+
+      # TODO: Support for Windows and Linux
+      - name: Geode SDK
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+           mkdir /Users/Shared/Geode
+           cd /Users/Shared/Geode
+             
+           git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
+           echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+           echo "$RUNNER_OS not supported"
+           exit 1
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+           echo "$RUNNER_OS not supported"
+           exit 1
+          else
+               echo "$RUNNER_OS not supported"
+               exit 1
+          fi
+
+      # TODO: Support for Windows and Linux
+      - name: Geode CLI
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
             mkdir /Users/Shared/Geode
             cd /Users/Shared/Geode
-            
-            # SDK
-            git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
-            echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
-            
-            # CLI
+
             mkdir cli
             git clone https://github.com/geode-sdk/cli --branch v2.4.0 --recursive cli-temp
             cd cli-temp
@@ -43,24 +58,22 @@ jobs:
             chmod +x cli/geode
             rm -rf cli-temp
             echo "PATH=$PATH:/Users/Shared/Geode/cli" >> $GITHUB_ENV
-      
-         elif [ "$RUNNER_OS" == "Windows" ]; then
-              echo "$RUNNER_OS not supported"
-              exit 1
-         elif [ "$RUNNER_OS" == "Linux" ]; then
-              echo "$RUNNER_OS not supported"
-              exit 1
-         else
-              echo "$RUNNER_OS not supported"
-              exit 1
-         fi
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            echo "$RUNNER_OS not supported"
+            exit 1
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            echo "$RUNNER_OS not supported"
+            exit 1
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
 
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+        # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
-    - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
+      - name: Build
+        # Build your program with the given configuration
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
