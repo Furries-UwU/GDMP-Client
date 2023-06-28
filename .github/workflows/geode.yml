@@ -29,7 +29,7 @@ jobs:
         with:
           repository: geode-sdk/cli
           latest: true
-          fileName: "geode-cli-v*-${{matrix.config.os_identifier}}.zip"
+          fileName: "${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
           out-file-path: "../cli"
@@ -37,6 +37,7 @@ jobs:
 
       - name: Geode CLI
         run: |
+          echo "${{matrix.config.os_identifier}}.zip"
           ls -a
           cd ../
           ls -a
