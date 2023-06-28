@@ -27,8 +27,23 @@ jobs:
          if [ "$RUNNER_OS" == "macOS" ]; then
             mkdir /Users/Shared/Geode
             cd /Users/Shared/Geode
+            
+            # SDK
             git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
             echo "GEODE_SDK=/Users/Shared/Geode/sdk" >> $GITHUB_ENV
+            
+            # CLI
+            mkdir cli
+            git clone https://github.com/geode-sdk/cli --branch v2.4.0 --recursive cli-temp
+            cd cli-temp
+            export OPENSSL_STATIC=1
+            cargo build --release
+            cd ../
+            cp cli-temp/target/Release/geode cli/geode
+            chmod +x cli/geode
+            rm -rf cli-temp
+            echo "PATH=$PATH:/Users/Shared/Geode/cli" >> $GITHUB_ENV
+      
          elif [ "$RUNNER_OS" == "Windows" ]; then
               echo "$RUNNER_OS not supported"
               exit 1
