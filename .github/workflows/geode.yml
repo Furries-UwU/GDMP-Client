@@ -11,9 +11,7 @@ jobs:
     strategy:
       matrix:
         config:
-          #         os: [macos-latest, windows-latest]
-          # os: [macos-latest]
-          - name: windows-latest
+          - os: windows-latest
             os_identifier: win
 
           - os: macos-latest
