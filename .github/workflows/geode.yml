@@ -32,15 +32,13 @@ jobs:
           fileName: "*-${{matrix.config.os_identifier}}.zip"
           tarBall: false
           zipBall: false
-          out-file-path: "../cli"
+          out-file-path: "cli"
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Geode CLI
         run: |
-          echo "*-${{matrix.config.os_identifier}}.zip"
-          ls -a
+          mv cli ../
           cd ../
-          ls -a
           cd cli
           ls -a
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o cli
