@@ -25,7 +25,7 @@ jobs:
       - name: Geode SDK
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-           mkdir /Users/Shared/Geode
+           mkdir -p /Users/Shared/Geode
            cd /Users/Shared/Geode
              
            git clone https://github.com/geode-sdk/geode --branch v1.0.0-beta.18 --recursive sdk
@@ -45,7 +45,7 @@ jobs:
       - name: Geode CLI
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
-            mkdir /Users/Shared/Geode
+            mkdir -p /Users/Shared/Geode
             cd /Users/Shared/Geode
 
             mkdir cli
