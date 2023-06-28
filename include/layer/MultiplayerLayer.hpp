@@ -3,9 +3,7 @@
 #include "include.hpp"
 #include "global.hpp"
 
-using namespace geode::prelude;
-
-class MultiplayerLayer : public CCLayer {
+class MultiplayerLayer : public cocos2d::CCLayer {
 protected:
     virtual bool init();
 
@@ -13,11 +11,11 @@ protected:
 
     virtual void keyBackClicked();
 
-    void backButtonCallback(CCObject *);
+    void backButtonCallback(cocos2d::CCObject *);
 
-    void connectButtonCallback(CCObject *);
+    void connectButtonCallback(cocos2d::CCObject *);
 
-    void disconnectButtonCallback(CCObject *);
+    void disconnectButtonCallback(cocos2d::CCObject *);
 
     cocos2d::CCLabelBMFont *connectionStatus;
     CCTextInputNode *ipInput;
@@ -25,5 +23,5 @@ protected:
 public:
     static MultiplayerLayer *create();
 
-    void switchToCustomLayerButton(CCObject *);
+    void switchToCustomLayerButton(cocos2d::CCObject *);
 };

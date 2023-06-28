@@ -41,7 +41,7 @@ if (NOT protobuf_ADDED)
     find_package(Protobuf REQUIRED)
 endif ()
 
-file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS src/*.cpp src/*.c)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.c)
 
 add_subdirectory(external/enet)
 add_library(${PROJECT_NAME} SHARED ${SOURCES} proto/packet.proto)
