@@ -41,9 +41,9 @@ jobs:
           7z x "cli/*-${{ matrix.config.os_identifier }}.zip" -o"${{github.workspace}}/../cli"
           echo "${{ github.workspace }}/../cli" >> $GITHUB_PATH
 
-          if [ "$RUNNER_OS" != "Windows" ]; then
-            chmod +x cli/geode
-          fi
+      - name: Make Geode CLI executable
+        if: ${{runner.os}} == 'macOS'
+        run: chmod +x ../cli/geode
 
       - name: Geode SDK
         run: |
