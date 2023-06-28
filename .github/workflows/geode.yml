@@ -59,7 +59,7 @@ jobs:
            cd sdk
 
            cmake -B build -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -DGEODE_DEBUG=Off -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCLI_PATH="/Users/Shared/Geode/cli"  -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-           cmake --build build --config Release --parallel || true
+           cmake --build build --config Release --parallel
 
            mv ./bin/nightly/Geode.dylib ./bin/nightly/GeodeBootstrapper.dylib ./loader/include/link/libfmod.dylib ./bin/$GEODE_SDK_VERSION
            rm -rf ./bin/nightly
