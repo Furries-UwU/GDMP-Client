@@ -21,7 +21,7 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-T host=x64 -A win32'
+          extra_flags: '-A win32'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
