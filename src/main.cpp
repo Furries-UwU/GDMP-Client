@@ -24,14 +24,14 @@ using namespace geode::prelude;
                         fmt::print("a player has suddenly appeared!!\n");
                         auto player_join = gdmp_packet->player_join();
 
-                        executeInCocosThread([player_join]() {
+                        executeInGDThread([player_join]() {
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
                             if (!playLayer) return;
 
                             const auto &visuals = player_join.visual();
 
-                            auto p1 = PlayerObject::create(1, 1, 0);
-                            p1->setPosition({0, 0});
+                            auto p1 = PlayerObject::create(1,1,0);
+                            p1->setPosition({0, 105});
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
@@ -60,6 +60,14 @@ using namespace geode::prelude;
                                     visuals.icon_robot(),
                                     visuals.icon_spider()
                             };
+  
+                            p1->updatePlayerBirdFrame(visuals.icon_ufo());
+                            p1->updatePlayerDartFrame(visuals.icon_wave());
+                            p1->updatePlayerRollFrame(visuals.icon_ball());
+                            p1->updatePlayerShipFrame(visuals.icon_ship());
+                            p1->updatePlayerFrame(visuals.icon_cube());
+                            p1->updatePlayerRobotFrame(visuals.icon_robot());
+                            p1->updatePlayerSpiderFrame(visuals.icon_spider());
 
                             Global::get()->players[player_join.p_id()] = p;
                         });
@@ -131,8 +139,7 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInCocosThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
-                            p1->update(1.0 / 60.0);
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
                             p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
@@ -141,7 +148,6 @@ using namespace geode::prelude;
                             } else if (Global::get()->P1_pushing && !button_p1) {
                                 p1->releaseButton(1);
                             }
-                            //p1->updatePlayerFrame(iconID_p1, iconType_p1);
                         });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");
@@ -166,7 +172,7 @@ using namespace geode::prelude;
                 }
                 case ENET_EVENT_TYPE_CONNECT: {
                     g->connected = true;
-                    executeInCocosThread([]() {
+                    executeInGDThread([]() {
                         Notification::create("Connected to the server!", NotificationIcon::Success)->show();
                     });
                     break;
@@ -174,7 +180,7 @@ using namespace geode::prelude;
                 case ENET_EVENT_TYPE_DISCONNECT: {
                     g->connected = false;
                     g->peer = nullptr;
-                    executeInCocosThread([]() {
+                    executeInGDThread([]() {
                         Notification::create("Disconnected from the server!", NotificationIcon::Error)->show();
                     });
                     break;
