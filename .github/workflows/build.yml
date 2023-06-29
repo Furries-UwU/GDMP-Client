@@ -22,14 +22,14 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-T host=x64 -A win32'
+          extra_flags: '-DCMAKE_BUILD_TYPE=Release -T host=x64 -A win32'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
         - name: "macOS"
           bin_folder: "macos"
           os: macos-latest
-          extra_flags: ""
+          extra_flags: "-DCMAKE_BUILD_TYPE=Release"
           out_paths: './build/*.dylib'
           platform_suffix: 'mac'
           
@@ -68,8 +68,8 @@ jobs:
     
     - name: Build
       run: |
-        cd ${{ github.workspace }}/build
-        cmake --build . --config Release -j 6
+        cd ${{ github.workspace }}
+        cmake --build build --config Release -j 6
     
     - uses: actions/upload-artifact@v3
       with:
