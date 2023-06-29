@@ -68,7 +68,7 @@ jobs:
     
     - name: Build
       run: |
-        cd ${{ github.workspace }}/build
+        cd ${{ github.workspace }}
         cmake --build build --config Release -j 6
     
     - uses: actions/upload-artifact@v3
