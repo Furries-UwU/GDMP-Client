@@ -58,7 +58,7 @@ jobs:
     - if: runner.os == 'Windows'
       uses: actions/checkout@v3
       with:
-        repo: 'protocolbuffers/protobuf'
+        repository: 'protocolbuffers/protobuf'
         submodules: recursive
         ref: 'v21.12'
         path: "prebuilt_protobuf/src"
@@ -86,6 +86,7 @@ jobs:
           cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
         fi
     
+
     - name: Build
       run: |
         cd ${{ github.workspace }}/build
