@@ -1,6 +1,7 @@
 #include "include.hpp"
 #include "global.hpp"
 #include "hooks.hpp"
+#include "MultiplayerObject.hpp"
 
 #if __APPLE__ && TARGET_OS_MAC
 
@@ -30,7 +31,7 @@ using namespace geode::prelude;
 
                             const auto &visuals = player_join.visual();
 
-                            auto p1 = SimplePlayer::create(visuals.icon_cube());
+                            auto p1 = PlayerObject::create(1, 1, 0);
                             p1->setPosition({0, 0});
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
@@ -45,7 +46,10 @@ using namespace geode::prelude;
                                                     (col_secondary_p1 >> 8) & 0xff,
                                                     col_secondary_p1 & 0xff
                             ));
-                            p1->setGlowOutline(glowy);
+                            //p1->setGlowOutline(glowy);
+                            p1->setTag(Global::get()->players.size());
+                            PlayLayer::get()->m_player1->setTag(0);
+                            PlayLayer::get()->m_player2->setTag(0);
 
                             playLayer->getObjectLayer()->addChild(p1);
 
@@ -83,33 +87,46 @@ using namespace geode::prelude;
                         auto pos_p1_y = player_move.pos_p1().pos_y();
                         auto rot_p1 = player_move.pos_p1().rotation();
                         auto scale_p1 = player_move.pos_p1().scale();
+                        auto button_p1 = player_move.pos_p1().pressed();
                         auto iconType_p1 = getIconType(getGamemodeFromGameMode(player_move.gamemode_p1()));
                         auto iconID_p1 = 0;
                         switch (iconType_p1) {
                             case IconType::Cube: {
                                 iconID_p1 = p.cube;
+                                p1->toggleFlyMode(false);
+                                p1->toggleBirdMode(false);
+                                p1->toggleRollMode(false);
+                                p1->toggleDartMode(false);
+                                p1->toggleRobotMode(false);
+                                p1->toggleSpiderMode(false);
                                 break;
                             }
                             case IconType::Ship: {
                                 iconID_p1 = p.ship;
+                                p1->toggleFlyMode(true);
                                 break;
                             }
                             case IconType::Ball: {
                                 iconID_p1 = p.ball;
+                                p1->toggleRollMode(true);
                                 break;
                             }
                             case IconType::Ufo: {
                                 iconID_p1 = p.ufo;
+                                p1->toggleBirdMode(true);
                                 break;
                             }
                             case IconType::Wave:
                                 iconID_p1 = p.wave;
+                                p1->toggleDartMode(true);
                                 break;
                             case IconType::Robot:
                                 iconID_p1 = p.robot;
+                                p1->toggleRobotMode(true);
                                 break;
                             case IconType::Spider:
                                 iconID_p1 = p.spider;
+                                p1->toggleSpiderMode(true);
                                 break;
                             case IconType::DeathEffect:
                             case IconType::Special:
@@ -118,11 +135,17 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, iconType_p1, p1]() {
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
+                            //p1->update(1.0 / 60.0);
                             p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
-                            p1->updatePlayerFrame(iconID_p1, iconType_p1);
+                            if (!Global::get()->P1_pushing && button_p1) {
+                                p1->pushButton(1);
+                            } else if (Global::get()->P1_pushing && !button_p1) {
+                                p1->releaseButton(1);
+                            }
+                            //p1->updatePlayerFrame(iconID_p1, iconType_p1);
                         });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");

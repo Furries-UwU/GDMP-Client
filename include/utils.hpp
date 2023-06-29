@@ -105,6 +105,11 @@ gdmp::Position getPositionDataFromPlayer(PlayerObject *player) {
     pos.set_pos_y(player->m_position.y);
     pos.set_rotation(player->getRotation());
     pos.set_scale(player->getScale());
+    if (player == PlayLayer::get()->m_player1) {
+        pos.set_pressed(Global::get()->P1_pushing);
+    } else {
+        pos.set_pressed(Global::get()->P2_pushing);
+    }
     return pos;
 }
 
