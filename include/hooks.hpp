@@ -193,10 +193,16 @@ class $modify(PlayLayer) {
     }
 };
 
-class $modify(HardStreak) {
-    void updateStroke(float p0) {
-        //this != PlayLayer::get()->m_player1->m_waveTrail && this != PlayLayer::get()->m_player2->m_waveTrail
-        if (PlayLayer::get() && (this->getParent()->getTag() != 0)) return;
-        HardStreak::updateStroke(p0);
+class $modify(GJBaseGameLayer) {
+    void pushButton(int i, bool pl) {
+        if (pl) Global::get()->P1_pushing = true;
+        if (!pl) Global::get()->P2_pushing = true;
+        GJBaseGameLayer::pushButton(i, pl);
+    }
+
+    void releaseButton(int i, bool pl) {
+        if (pl) Global::get()->P1_pushing = false;
+        if (!pl) Global::get()->P2_pushing = false;
+        GJBaseGameLayer::releaseButton(i, pl);
     }
 };

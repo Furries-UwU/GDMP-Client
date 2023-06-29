@@ -7,7 +7,7 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/modify/CCScheduler.hpp>
-#include <Geode/modify/HardStreak.hpp>
+#include <Geode/modify/GJBaseGameLayer.hpp>
 
 // logging
 #include <fmt/core.h>

@@ -1,7 +1,6 @@
 #include "include.hpp"
 #include "global.hpp"
 #include "hooks.hpp"
-#include "MultiplayerObject.hpp"
 
 #if __APPLE__ && TARGET_OS_MAC
 
@@ -132,11 +131,16 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, iconType_p1, p1]() {
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
                             p1->update(1.0 / 60.0);
                             p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
+                            if (!Global::get()->P1_pushing && button_p1) {
+                                p1->pushButton(1);
+                            } else if (Global::get()->P1_pushing && !button_p1) {
+                                p1->releaseButton(1);
+                            }
                             //p1->updatePlayerFrame(iconID_p1, iconType_p1);
                         });
                     } else if (gdmp_packet->has_player_leave()) {
