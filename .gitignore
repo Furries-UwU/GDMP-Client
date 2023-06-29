@@ -60,3 +60,4 @@ cmake-build-*/
 
 # prebuilt protobuf libs
 protobuf_win32/
+prebuilt_protobuf/
