@@ -22,14 +22,14 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-T host=x64 -A win32'
+          extra_flags: '-DCMAKE_BUILD_TYPE=Release -T host=x64 -A win32'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
         - name: "macOS"
           bin_folder: "macos"
           os: macos-latest
-          extra_flags: ""
+          extra_flags: "-DCMAKE_BUILD_TYPE=Release"
           out_paths: './build/*.dylib'
           platform_suffix: 'mac'
           
@@ -64,7 +64,7 @@ jobs:
     - name: Configure CMake
       run: |
         cd ${{ github.workspace }}
-        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
+        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -j 6
     
     - name: Build
       run: |
