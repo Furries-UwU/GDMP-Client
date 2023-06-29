@@ -9,6 +9,7 @@ env:
   GEODE_SDK: ${{ github.workspace }}/sdk
   GEODE_VERSION: nightly
   CLI_VERSION: v2.4.0
+  SDK_VERSION: v1.0.0-beta.18
   MOD_NAME: GDMP
   MOD_ID: gay.rooot.gdmp
 
@@ -21,7 +22,7 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-A win32'
+          extra_flags: '-T host=x64 -A win32 -G Ninja'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
@@ -44,7 +45,7 @@ jobs:
       with:
         submodules: recursive
         repository: geode-sdk/geode
-        # ref: v0.4.8
+        ref: ${{ env.SDK_VERSION }}
         path: ${{ env.GEODE_SDK }}
      
     - uses: ilammy/msvc-dev-cmd@v1
