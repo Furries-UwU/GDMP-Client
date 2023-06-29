@@ -75,8 +75,7 @@ jobs:
       with:
         name: "build-${{ matrix.config.bin_folder }}"
         path: "${{ matrix.config.out_paths }}"
-        
-        
+  
   package:
     name: "Package both builds"
     runs-on: ubuntu-latest
@@ -103,13 +102,10 @@ jobs:
       
       - name: Merge
         run: |
-          ls -a
           mv $MOD_NAME.dll $MOD_ID.dll
-          ls -a
           mv lib$MOD_NAME.dylib $MOD_ID.dylib
-          ls -a
-          ./geode package new . --binary $MOD_ID.dll --binary $MOD_ID.dylib --output $MOD_ID.geode
-         
+          ./geode package new ${{ github.workspace }} --binary $MOD_ID.dll --binary $MOD_ID.dylib --output $MOD_ID.geode
+        
       - uses: actions/upload-artifact@v3
         with:
           name: Build Output
