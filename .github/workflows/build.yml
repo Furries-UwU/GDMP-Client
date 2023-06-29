@@ -79,7 +79,7 @@ jobs:
         
   package:
     name: "Package both builds"
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     needs: ['build']
     
     steps:          
@@ -101,7 +101,6 @@ jobs:
           name: build-macos
       
       - name: Merge
-        shell: bash
         run: |
           mv $MOD_NAME.dll $MOD_ID.dll
           mv lib$MOD_NAME.dylib $MOD_ID.dylib
