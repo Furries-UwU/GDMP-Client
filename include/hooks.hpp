@@ -7,7 +7,7 @@
 std::vector<std::function<void()>> functionQueue;
 std::mutex threadMutex;
 
-void executeInGDThread(std::function<void()> f) {
+void executeInCocosThread(std::function<void()> f) {
     std::lock_guard<std::mutex> lock(threadMutex);
     functionQueue.push_back(std::move(f));
 }
