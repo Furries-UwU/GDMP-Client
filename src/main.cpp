@@ -67,7 +67,11 @@ using namespace geode::prelude;
                             p1->updatePlayerShipFrame(visuals.icon_ship());
                             p1->updatePlayerFrame(visuals.icon_cube());
                             p1->updatePlayerRobotFrame(visuals.icon_robot());
+                            #if __APPLE__ && TARGET_OS_MAC
                             p1->updatePlayerSpiderFrame(visuals.icon_spider());
+                            #else
+                            p1->m_spiderSprite->updateFrame(visuals.icon_spider());
+                            #endif
 
                             Global::get()->players[player_join.p_id()] = p;
                         });
