@@ -47,6 +47,21 @@ jobs:
         repository: geode-sdk/geode
         ref: ${{ env.SDK_VERSION }}
         path: ${{ env.GEODE_SDK }}
+
+    - if: runner.os == 'Windows'
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        ref: 'prebuilt-protobuf'
+        path: "prebuilt_protobuf"
+
+    - if: runner.os == 'Windows'
+      uses: actions/checkout@v3
+      with:
+        repo: 'protocolbuffers/protobuf'
+        submodules: recursive
+        ref: 'v21.12'
+        path: "prebuilt_protobuf/src"
      
     - uses: ilammy/msvc-dev-cmd@v1
       with:
@@ -64,7 +79,12 @@ jobs:
     - name: Configure CMake
       run: |
         cd ${{ github.workspace }}
-        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          echo "using prebuilt protobuf"
+          cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -DUSE_PREBUILT_LIBS=true
+        else
+          cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
+        fi
     
     - name: Build
       run: |
