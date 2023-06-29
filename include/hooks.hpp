@@ -108,8 +108,7 @@ class $modify(PlayLayer) {
             auto player_join = new gdmp::PlayerJoinPacket();
             player_join->set_allocated_room(&room);
             player_join->set_allocated_visual(visuals);
-            std::string username = gameManager->m_playerName;
-            player_join->set_allocated_username(&username);
+            player_join->set_username(gameManager->m_playerName);
 
             packet->set_allocated_player_join(player_join);
 
