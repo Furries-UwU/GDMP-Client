@@ -59,7 +59,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: 'protocolbuffers/protobuf'
-        submodules: recursive
         ref: 'v21.12'
         path: "prebuilt_protobuf/src"
      
@@ -80,7 +79,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         cd ${{ github.workspace }}
-        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -DUSE_PREBUILT_LIBS=true
+        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -DUSE_PREBUILT_LIBS=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe
 
     - name: Configure CMake (not Windows)
       if: runner.os != 'Windows'
