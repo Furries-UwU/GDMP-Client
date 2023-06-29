@@ -192,3 +192,11 @@ class $modify(PlayLayer) {
         }
     }
 };
+
+class $modify(HardStreak) {
+    void updateStroke(float p0) {
+        //this != PlayLayer::get()->m_player1->m_waveTrail && this != PlayLayer::get()->m_player2->m_waveTrail
+        if (PlayLayer::get() && (this->getParent()->getTag() != 0)) return;
+        HardStreak::updateStroke(p0);
+    }
+};

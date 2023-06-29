@@ -3,8 +3,8 @@
 #include "include.hpp"
 
 struct Player {
-    SimplePlayer *p1 = nullptr;
-    SimplePlayer *p2 = nullptr;
+    PlayerObject *p1 = nullptr;
+    PlayerObject *p2 = nullptr;
 
     uint32_t cube   = 0;
     uint32_t ship   = 0;
@@ -21,6 +21,9 @@ public:
     ENetPeer *peer = nullptr;
 
     bool connected = false;
+
+    bool P1_pushing = false;
+    bool P2_pushing = false;
 
     std::unordered_map<uint64_t, Player> players;
 

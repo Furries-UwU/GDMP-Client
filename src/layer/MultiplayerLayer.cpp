@@ -16,11 +16,27 @@ void MultiplayerLayer::connectButtonCallback(CCObject *object) {
 
     if (global->peer) enet_peer_disconnect(global->peer, 0);
 
+<<<<<<< HEAD
+    log::info("tried disconnect");
+
+=======
+>>>>>>> fde0e015cfeac54ec636476e085a5d3eea81addb
     ENetAddress addr;
     enet_address_set_host(&addr, ipInput->getString());
     addr.port = std::stoi(portInput->getString());
 
+<<<<<<< HEAD
+    log::info("set host");
+    log::info("ipInput = {}", ipInput->getString());
+    log::info("addr.port = {}", addr.port);
+
     global->peer = enet_host_connect(global->host, &addr, 1, 0);
+
+    log::info("connected");
+
+=======
+    global->peer = enet_host_connect(global->host, &addr, 1, 0);
+>>>>>>> fde0e015cfeac54ec636476e085a5d3eea81addb
     if (!global->peer) {
         Notification::create("Failed to connect to the server!", NotificationIcon::Error)->show();
         return;
