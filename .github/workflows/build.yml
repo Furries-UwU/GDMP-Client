@@ -22,14 +22,14 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-DCMAKE_BUILD_TYPE=Release -T host=x64 -A win32'
+          extra_flags: '-T host=x64 -A win32'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
         - name: "macOS"
           bin_folder: "macos"
           os: macos-latest
-          extra_flags: "-DCMAKE_BUILD_TYPE=Release"
+          extra_flags: ""
           out_paths: './build/*.dylib'
           platform_suffix: 'mac'
           
@@ -68,8 +68,8 @@ jobs:
     
     - name: Build
       run: |
-        cd ${{ github.workspace }}
-        cmake --build build --config Release -j 6
+        cd ${{ github.workspace }}/build
+        cmake --build . --config Release -j 6
     
     - uses: actions/upload-artifact@v3
       with:
@@ -90,7 +90,8 @@ jobs:
       - name: Download and Unzip CLI
         run: |
           curl -L https://github.com/geode-sdk/cli/releases/download/${{ env.CLI_VERSION }}/geode-cli-${{ env.CLI_VERSION }}-linux.zip -o geode-cli.zip
-          tar -xf geode-cli.zip
+          unzip geode-cli.zip
+          chmod +x geode
 
       - uses: actions/download-artifact@v3
         with:
@@ -104,7 +105,6 @@ jobs:
         run: |
           mv $MOD_NAME.dll $MOD_ID.dll
           mv lib$MOD_NAME.dylib $MOD_ID.dylib
-          chmod +x geode
           geode package new . --binary $MOD_ID.dll --binary $MOD_ID.dylib --output $MOD_ID.geode
          
       - uses: actions/upload-artifact@v3
