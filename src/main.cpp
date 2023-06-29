@@ -24,7 +24,7 @@ using namespace geode::prelude;
                         fmt::print("a player has suddenly appeared!!\n");
                         auto player_join = gdmp_packet->player_join();
 
-                        executeInGDThread([player_join]() {
+                        executeInCocosThread([player_join]() {
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
                             if (!playLayer) return;
 
@@ -131,7 +131,7 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
+                        executeInCocosThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
                             p1->update(1.0 / 60.0);
                             p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
@@ -166,7 +166,7 @@ using namespace geode::prelude;
                 }
                 case ENET_EVENT_TYPE_CONNECT: {
                     g->connected = true;
-                    executeInGDThread([]() {
+                    executeInCocosThread([]() {
                         Notification::create("Connected to the server!", NotificationIcon::Success)->show();
                     });
                     break;
@@ -174,7 +174,7 @@ using namespace geode::prelude;
                 case ENET_EVENT_TYPE_DISCONNECT: {
                     g->connected = false;
                     g->peer = nullptr;
-                    executeInGDThread([]() {
+                    executeInCocosThread([]() {
                         Notification::create("Disconnected from the server!", NotificationIcon::Error)->show();
                     });
                     break;
