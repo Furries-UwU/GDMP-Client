@@ -30,7 +30,7 @@ using namespace geode::prelude;
 
                             const auto &visuals = player_join.visual();
 
-                            auto p1 = PlayerObject::create(1,1,0);
+                            auto p1 = PlayerObject::create(1, 1, 0);
                             p1->setPosition({0, 0});
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
@@ -131,7 +131,7 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
+                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
                             p1->update(1.0 / 60.0);
                             p1->setPosition({pos_p1_x, pos_p1_y});
                             p1->setRotation(rot_p1);
