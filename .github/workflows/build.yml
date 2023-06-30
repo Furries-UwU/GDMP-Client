@@ -78,14 +78,7 @@ jobs:
           curl -L https://github.com/geode-sdk/geode/releases/download/${{ env.GEODE_VERSION }}/geode-${{ env.GEODE_VERSION }}-${{ matrix.config.platform_suffix }}.zip -o geode-sdk.zip
           tar -xf geode-sdk.zip
 
-
-
-
-
-
-
       - name: Configure CMake
-
         run: |
           cd ${{ github.workspace }}
           cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
