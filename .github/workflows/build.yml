@@ -9,7 +9,6 @@ env:
   GEODE_SDK: ${{ github.workspace }}/sdk
   CLI_VERSION: v2.4.0
   GEODE_VERSION: nightly
-  # Root haven't updated the prebuilt protobuf version
   PREBUILT_PROTOBUF_VERSION: v21.12
   SDK_VERSION: v1.0.0-beta.18
   MOD_NAME: GDMP
@@ -57,19 +56,10 @@ jobs:
           path: "prebuilt_protobuf"
 
       - uses: actions/checkout@v3
-        if: runner.os == 'Windows'
         with:
           submodules: recursive
           repository: 'protocolbuffers/protobuf'
           ref: ${{ env.PREBUILT_PROTOBUF_VERSION }}
-          path: "prebuilt_protobuf/src"
-
-      - uses: actions/checkout@v3
-        if: runner.os == 'macOS'
-        with:
-          submodules: recursive
-          repository: 'protocolbuffers/protobuf'
-          ref: "v23.2"
           path: "prebuilt_protobuf/src"
 
       - uses: ilammy/msvc-dev-cmd@v1
