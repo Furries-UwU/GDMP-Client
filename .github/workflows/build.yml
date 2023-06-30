@@ -50,7 +50,7 @@ jobs:
           path: ${{ env.GEODE_SDK }}
 
       - uses: actions/checkout@v3
-        if: runner.os == 'Windows
+        if: runner.os == 'Windows'
         with:
           submodules: recursive
           ref: 'prebuilt-protobuf'
