@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(GDMP VERSION 1.0.0)
 
-option(USE_PREBUILT_LIBS "Only for rooot lmao" OFF)
+option(USE_PREBUILT_PROTOBUF "Only for rooot lmao" OFF)
 
 include(cmake/CPM.cmake)
 
