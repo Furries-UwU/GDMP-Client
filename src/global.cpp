@@ -1,6 +1,5 @@
-/* ========================================================
- * Why have a girl when you can have an imaginary fox girl?
- * ========================================================
+/*
+ * Why have a girlfriend when you can be a girlfriend?
  */
 
 #include "global.hpp"

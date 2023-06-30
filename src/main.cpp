@@ -1,6 +1,5 @@
-/* =======================================================================
- * They ask me why i make "yip, yap" noise, i tell them, i am a furry fox.
- * =======================================================================
+/*
+ * Rust support in Geode when?
  */
 
 #include "include.hpp"

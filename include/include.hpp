@@ -1,6 +1,5 @@
-/* ======================================================
- * Sometimes i wonder why I make joke file header comment
- * ======================================================
+/*
+ * Sometimes, I wonder why I make joke comment
  */
 
 #pragma once

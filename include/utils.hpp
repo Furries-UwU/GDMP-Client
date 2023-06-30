@@ -1,6 +1,5 @@
-/* ====================================================================================
- * Why did we use rust for our server instead of C++? Simple, C++ makes us want to die.
- * ====================================================================================
+/*
+ * Rust > C++ (c++ causes depression)
  */
 
 #pragma once

@@ -1,6 +1,5 @@
-/* ===================================================================================
- * If you wonder what took us many months to revive this project, it is because of C++
- * ===================================================================================
+/*
+ * If you wonder why it took us months to revive this project, it is because C++ causes depression
  */
 
 #pragma once

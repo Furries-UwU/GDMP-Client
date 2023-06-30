@@ -1,6 +1,5 @@
-/* ==================================================================
- * If you feels worthless, remember that I am more worthless than you
- * ==================================================================
+/*
+ * If you ever feel worthless, remember that I am more worthless than you
  */
 
 #pragma once

@@ -1,6 +1,5 @@
-/* =============================
- * Why did we use enet? Because.
- * =============================
+/*
+ * Why did we use enet? Because yes.
  */
 
 #pragma once
