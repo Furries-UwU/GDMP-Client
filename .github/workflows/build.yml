@@ -31,7 +31,7 @@ jobs:
           - name: "macOS"
             bin_folder: "macos"
             os: macos-latest
-            extra_flags: ""
+            extra_flags: "-DUSE_PREBUILT_PROTOBUF=1"
             out_paths: './build/*.dylib'
             platform_suffix: 'mac'
 
@@ -51,14 +51,12 @@ jobs:
           path: ${{ env.GEODE_SDK }}
 
       - uses: actions/checkout@v3
-        if: runner.os == 'Windows'
         with:
           submodules: recursive
           ref: 'prebuilt-protobuf'
           path: "prebuilt_protobuf"
 
       - uses: actions/checkout@v3
-        if: runner.os == 'Windows'
         with:
           submodules: recursive
           repository: 'protocolbuffers/protobuf'
