@@ -22,7 +22,7 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-T host=x64 -A win32 -DUSE_PREBUILT_LIBS=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe'
+          extra_flags: '-T host=x64 -A win32 -DUSE_PREBUILT_PROTOBUF=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           

@@ -12,7 +12,7 @@ if (WIN32 OR MINGW)
     add_compile_definitions(WIN32_LEAN_AND_MEAN)
 endif ()
 
-if (USE_PREBUILT_LIBS)
+if (USE_PREBUILT_PROTOBUF)
     set(Protobuf_LIBRARIES ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt_protobuf/win32)
     set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt_protobuf/win32/libprotobuf-lite.lib)
     set(Protobuf_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt_protobuf/win32/libprotobuf.lib)
