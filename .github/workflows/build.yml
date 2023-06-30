@@ -24,7 +24,7 @@ jobs:
           - name: "Windows"
             bin_folder: "windows"
             os: windows-latest
-            extra_flags: '-T host=x64 -A win32 -DUSE_PREBUILT_PROTOBUF=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe'
+            extra_flags: '-T host=x64 -A win32'
             out_paths: './build/Release/*.dll'
             platform_suffix: 'win'
 
@@ -79,6 +79,13 @@ jobs:
           tar -xf geode-sdk.zip
 
       - name: Configure CMake
+        if: runner.os == 'Windows'
+        run: |
+          cd ${{ github.workspace }}
+          cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -DUSE_PREBUILT_PROTOBUF=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe
+
+      - name: Configure CMake
+        if: runner.os != 'Windows'
         run: |
           cd ${{ github.workspace }}
           cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
