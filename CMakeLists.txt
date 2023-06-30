@@ -38,7 +38,7 @@ endif ()
 if (USE_PROTOBUF_CPM)
     CPMAddPackage(
             NAME protobuf
-            VERSION 23.1
+            VERSION 23.3
             GITHUB_REPOSITORY protocolbuffers/protobuf
             OPTIONS "BUILD_SHARED_LIBS OFF" "protobuf_BUILD_TESTS OFF" "protobuf_BUILD_LIBPROTOC ON")
 
