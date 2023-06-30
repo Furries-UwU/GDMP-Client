@@ -22,7 +22,7 @@ jobs:
         - name: "Windows"
           bin_folder: "windows"
           os: windows-latest
-          extra_flags: '-T host=x64 -A win32'
+          extra_flags: '-T host=x64 -A win32 -DUSE_PREBUILT_LIBS=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe'
           out_paths:  './build/Release/*.dll'
           platform_suffix: 'win'
           
@@ -75,14 +75,7 @@ jobs:
         curl -L https://github.com/geode-sdk/geode/releases/download/${{ env.GEODE_VERSION }}/geode-${{ env.GEODE_VERSION }}-${{ matrix.config.platform_suffix }}.zip -o geode-sdk.zip
         tar -xf geode-sdk.zip
 
-    - name: Configure CMake (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        cd ${{ github.workspace }}
-        cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1 -DUSE_PREBUILT_LIBS=true -DProtobuf_PROTOC_EXECUTABLE=${{ github.workspace }}/prebuilt_protobuf/win32/protoc.exe
-
-    - name: Configure CMake (not Windows)
-      if: runner.os != 'Windows'
+    - name: Configure CMake
       run: |
         cd ${{ github.workspace }}
         cmake -B build ${{ matrix.config.extra_flags }} -DGEODE_DISABLE_CLI_CALLS=1
