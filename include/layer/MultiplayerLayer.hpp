@@ -1,3 +1,8 @@
+/* ==================================================================
+ * If you feels worthless, remember that I am more worthless than you
+ * ==================================================================
+ */
+
 #pragma once
 
 #include "include.hpp"

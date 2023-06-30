@@ -1,3 +1,8 @@
+/* ===================================================================================
+ * If you wonder what took us many months to revive this project, it is because of C++
+ * ===================================================================================
+ */
+
 #pragma once
 
 #include "layer/MultiplayerLayer.hpp"

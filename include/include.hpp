@@ -1,3 +1,8 @@
+/* ======================================================
+ * Sometimes i wonder why I make joke file header comment
+ * ======================================================
+ */
+
 #pragma once
 
 // geode

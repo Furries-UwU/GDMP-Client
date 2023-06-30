@@ -1,3 +1,8 @@
+/* =======================================================================
+ * They ask me why i make "yip, yap" noise, i tell them, i am a furry fox.
+ * =======================================================================
+ */
+
 #include "include.hpp"
 #include "global.hpp"
 #include "hooks.hpp"

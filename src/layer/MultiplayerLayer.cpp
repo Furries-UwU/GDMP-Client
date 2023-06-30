@@ -1,3 +1,8 @@
+/* =========================================================================
+ * People ask me, "hayper, why did you make this mod?", I tell em, "for fun"
+ * =========================================================================
+ */
+
 #include "layer/MultiplayerLayer.hpp"
 
 using namespace geode::prelude;
