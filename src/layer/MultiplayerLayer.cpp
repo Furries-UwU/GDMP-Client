@@ -25,11 +25,16 @@ void MultiplayerLayer::connectButtonCallback(CCObject *object) {
     addr.port = std::stoi(portInput->getString());
 
     global->peer = enet_host_connect(global->host, &addr, 1, 0);
-
     if (!global->peer) {
         Notification::create("Failed to connect to the server!", NotificationIcon::Error)->show();
         return;
     };
+}
+
+cocos2d::CCArray* MultiplayerLayer::getRoomListing() {
+    cocos2d::CCArray* array = cocos2d::CCArray::create();
+    array->addObject(RoomCell::create({false, "i dont know", false, 10, 10, 10, "ninXout", "Example Room"}, this, {400, 68}, false));
+    return array;
 }
 
 MultiplayerLayer *MultiplayerLayer::create() {
@@ -51,11 +56,60 @@ bool MultiplayerLayer::init() {
     auto director = CCDirector::get();
     auto winSize = director->getWinSize();
 
-    auto label = CCLabelBMFont::create("Multiplayer", "bigFont.fnt");
+    auto cells = this->getRoomListing();
+
+    auto listLayer = CCLayer::create();
+    auto list = ListView::create(
+        cells,
+        60,
+        400,
+        190
+    );
+
+    list->setPositionY(-10.f);
+
+    auto sideLeft = CCSprite::createWithSpriteFrameName("GJ_table_side_001.png");
+    sideLeft->setAnchorPoint(ccp(0, 0));
+    sideLeft->setScaleY(2.475f);
+    sideLeft->setScaleX(1.2f);
+    sideLeft->setPosition({-30, 24});
+    sideLeft->setZOrder(9);
+
+    auto sideTop = CCSprite::createWithSpriteFrameName("GJ_table_top02_001.png");
+    sideTop->setAnchorPoint(ccp(0, 0));
+    sideTop->setScaleX(1.15f);
+    sideTop->setScaleY(1.5f);
+    sideTop->setPosition(ccp(-29.f, 164.f));
+    sideTop->setZOrder(9);
+
+    auto sideBottom = CCSprite::createWithSpriteFrameName("GJ_table_bottom_001.png");
+    //sideBottom->setFlipY(true);
+    sideBottom->setAnchorPoint(ccp(0, 0));
+    sideBottom->setPosition(ccp(-24.f, -17.f));
+    sideBottom->setScaleX(1.14f);
+    sideBottom->setZOrder(10);
+
+    auto sideRight = CCSprite::createWithSpriteFrameName("GJ_table_side_001.png");
+    sideRight->setFlipX(true);
+    sideRight->setScaleY(2.475f);
+    sideRight->setScaleX(1.2f);
+    sideRight->setAnchorPoint(ccp(0, 0));
+    sideRight->setPosition({389, 22});
+    sideRight->setZOrder(9);
+
+    listLayer->addChild(sideLeft);
+    listLayer->addChild(sideTop);
+    listLayer->addChild(sideBottom);
+    listLayer->addChild(sideRight);
+    listLayer->addChild(list);
+    listLayer->setPosition(winSize / 2 - list->getScaledContentSize() / 2);
+    addChild(listLayer);
+
+    auto label = CCLabelBMFont::create("Multiplayer", "goldFont.fnt");
     label->setPosition(ccp(director->getWinSize().width / 2,
                            director->getWinSize().height - 25));
     addChild(label);
-
+/*
     auto ipLabel = CCLabelBMFont::create("IP", "bigFont.fnt");
     ipLabel->setPosition(ccp((director->getWinSize().width / 2) - 150,
                              (director->getWinSize().height / 2) + 50));
@@ -79,7 +133,7 @@ bool MultiplayerLayer::init() {
     portInput->setAllowedChars("0123456789");
     portInput->setString("34154");
     addChild(portInput);
-
+*/
     connectionStatus = CCLabelBMFont::create(
             fmt::format("Status: {}", global->connected ? "Connected" : "Not connected").c_str(), "bigFont.fnt");
     connectionStatus->setPosition(ccp((director->getWinSize().width / 2), (director->getWinSize().height / 2) - 120));
@@ -111,13 +165,13 @@ bool MultiplayerLayer::init() {
             menu_selector(MultiplayerLayer::backButtonCallback)
     );
 
-    auto backgroundSprite = CCSprite::create("GJ_gradientBG.png");
+    auto backgroundSprite = CCSprite::create("game_bg_01_001-uhd.png");
     auto backgroundSize = backgroundSprite->getContentSize();
 
     backgroundSprite->setScaleX(winSize.width / backgroundSize.width);
     backgroundSprite->setScaleY(winSize.height / backgroundSize.height);
     backgroundSprite->setAnchorPoint({0, 0});
-    backgroundSprite->setColor({0, 0, 0});
+    backgroundSprite->setColor({40, 125, 255});
 
     backgroundSprite->setZOrder(-1);
     addChild(backgroundSprite);
@@ -166,6 +220,5 @@ void MultiplayerLayer::switchToCustomLayerButton(CCObject *object) {
 
 void MultiplayerLayer::update(float dt) {
     Global *global = Global::get();
-
     connectionStatus->setString(fmt::format("Status: {}", global->connected ? "Connected" : "Not connected").c_str());
 }
