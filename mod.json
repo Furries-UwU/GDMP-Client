@@ -1,9 +1,9 @@
 {
-  "geode": "v1.0.0",
-  "version": "v0.0.0",
-  "id": "gay.rooot.gdmp",
-  "name": "gdmp",
-  "developer": "rooot xhayper",
-  "description": "multiplayer mod",
-  "binary": "gdmp"
+  "geode":        "v1.0.0",
+  "version":      "v0.0.0",
+  "id":           "gay.rooot.gdmp",
+  "name":         "gdmp",
+  "developer":    "rooot xhayper ninXout",
+  "description":  "multiplayer mod",
+  "binary":       "gdmp"
 }
