@@ -225,9 +225,7 @@ $execute {
 
 $on_mod(Unloaded) {
     fmt::print("unloading meow :3\n");
-    Global *g = Global::get();
-    if (g->host) {
-        enet_host_destroy(g->host);
-        g->host = nullptr;
-    }
+    Global *global = Global::get();
+    if (global->peer)
+        enet_peer_disconnect(global->peer, 0);
 }
