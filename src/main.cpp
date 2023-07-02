@@ -34,7 +34,7 @@ using namespace geode::prelude;
 
                             const auto &visuals = player_join.visual();
 
-                            auto p1 = PlayerObject::create(1,1,0);
+                            auto p1 = PlayerObject::create(1, 1, 0);
                             p1->setPosition({0, 105});
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
@@ -64,18 +64,18 @@ using namespace geode::prelude;
                                     visuals.icon_robot(),
                                     visuals.icon_spider()
                             };
-  
+
                             p1->updatePlayerBirdFrame(visuals.icon_ufo());
                             p1->updatePlayerDartFrame(visuals.icon_wave());
                             p1->updatePlayerRollFrame(visuals.icon_ball());
                             p1->updatePlayerShipFrame(visuals.icon_ship());
                             p1->updatePlayerFrame(visuals.icon_cube());
                             p1->updatePlayerRobotFrame(visuals.icon_robot());
-                            #if __APPLE__ && TARGET_OS_MAC
+#if __APPLE__ && TARGET_OS_MAC
                             p1->updatePlayerSpiderFrame(visuals.icon_spider());
-                            #else
+#else
                             p1->m_spiderSprite->updateFrame(visuals.icon_spider());
-                            #endif
+#endif
 
                             Global::get()->players[player_join.p_id()] = p;
                         });
@@ -147,16 +147,17 @@ using namespace geode::prelude;
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
-                        executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
-                            p1->setPosition({pos_p1_x, pos_p1_y});
-                            p1->setRotation(rot_p1);
-                            p1->setScale(scale_p1);
-                            if (!Global::get()->P1_pushing && button_p1) {
-                                p1->pushButton(1);
-                            } else if (Global::get()->P1_pushing && !button_p1) {
-                                p1->releaseButton(1);
-                            }
-                        });
+                        executeInGDThread(
+                                [pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
+                                    p1->setPosition({pos_p1_x, pos_p1_y});
+                                    p1->setRotation(rot_p1);
+                                    p1->setScale(scale_p1);
+                                    if (!Global::get()->P1_pushing && button_p1) {
+                                        p1->pushButton(1);
+                                    } else if (Global::get()->P1_pushing && !button_p1) {
+                                        p1->releaseButton(1);
+                                    }
+                                });
                     } else if (gdmp_packet->has_player_leave()) {
                         fmt::print(":vanish:\n");
                         auto global = Global::get();
@@ -220,4 +221,13 @@ $execute {
     // real..
     std::thread eventThread(&pollEvent);
     eventThread.detach();
+}
+
+$on_mod(Unloaded) {
+    fmt::print("unloading meow :3\n");
+    Global *g = Global::get();
+    if (g->host) {
+        enet_host_destroy(g->host);
+        g->host = nullptr;
+    }
 }

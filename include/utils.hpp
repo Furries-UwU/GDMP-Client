@@ -60,8 +60,6 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
     switch (gamemode) {
         case gdmp::GameMode::NONE:
             return Gamemode::NONE;
-        case gdmp::GameMode::CUBE:
-            return Gamemode::CUBE;
         case gdmp::GameMode::SHIP:
             return Gamemode::SHIP;
         case gdmp::GameMode::BALL:
@@ -74,10 +72,12 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
             return Gamemode::ROBOT;
         case gdmp::GameMode::SPIDER:
             return Gamemode::SPIDER;
-            // default include:
-            // gdmp::GameMode::CUBE
-            // gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_
-            // gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_
+        case gdmp::GameMode::CUBE:
+            [[fallthrough]];
+        case gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_:
+            [[fallthrough]];
+        case gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_:
+            [[fallthrough]];
         default:
             return Gamemode::CUBE;
     }
@@ -85,9 +85,6 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
 
 IconType getIconType(Gamemode gamemode) {
     switch (gamemode) {
-        default:
-        case CUBE:
-            return IconType::Cube;
         case SHIP:
             return IconType::Ship;
         case BALL:
@@ -100,6 +97,10 @@ IconType getIconType(Gamemode gamemode) {
             return IconType::Robot;
         case SPIDER:
             return IconType::Spider;
+        case CUBE:
+            [[fallthrough]];
+        default:
+            return IconType::Cube;
     }
 }
 
