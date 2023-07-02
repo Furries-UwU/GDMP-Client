@@ -29,7 +29,7 @@ jobs:
 
           - name: "macOS"
             bin_folder: "macos"
-            os: macos-latest
+            os: macos-13
             extra_flags: "-DUSE_PREBUILT_PROTOBUF=1"
             out_paths: './build/*.dylib'
             platform_suffix: 'mac'
