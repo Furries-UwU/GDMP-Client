@@ -31,11 +31,10 @@ void MultiplayerLayer::connectButtonCallback(CCObject *object) {
     };
 }
 
-cocos2d::CCArray *MultiplayerLayer::getRoomListing() {
-    cocos2d::CCArray *array = cocos2d::CCArray::create();
-    array->addObject(
-            RoomCell::create({false, "i dont know", false, 10, 10, 10, "ninXout", "Example Room"}, this, {400, 68},
-                             false));
+cocos2d::CCArray* MultiplayerLayer::getRoomListing() {
+    cocos2d::CCArray* array = cocos2d::CCArray::create();
+    array->addObject(RoomCell::create({false, "i dont know", false, 10, 10, 736, "ninXout", "a room thats full"}, this, {400, 68}, false));
+    array->addObject(RoomCell::create({false, "i dont know", false, 10, 4, 166, "ninXout", "a room that isn't full"}, this, {400, 68}, false));
     return array;
 }
 
@@ -62,10 +61,10 @@ bool MultiplayerLayer::init() {
 
     auto listLayer = CCLayer::create();
     auto list = ListView::create(
-            cells,
-            60,
-            400,
-            190
+        cells,
+        60,
+        400,
+        190
     );
 
     list->setPositionY(-10.f);
