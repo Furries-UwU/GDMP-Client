@@ -1,6 +1,6 @@
 #include "layer/MultiplayerLayer.hpp"
 
-static RoomPage* create(Room roomInfo, int state) {
+static RoomPage *create(Room roomInfo, int state) {
     auto node = new RoomPage;
     if (node && node->init(roomInfo, state)) {
         node->autorelease();
@@ -17,9 +17,11 @@ bool RoomPage::init(Room roomInfo, int state) {
     auto m_pLayer = CCLayer::create();
     addChild(m_pLayer);
 
-    auto bg = cocos2d::extension::CCScale9Sprite::create("GJ_square01.png", { 0.0f, 0.0f, 80.0f, 80.0f });
+    auto bg = cocos2d::extension::CCScale9Sprite::create("GJ_square01.png", {0.0f, 0.0f, 80.0f, 80.0f});
     const CCSize window_size(400, 250);
     bg->setContentSize(window_size);
     bg->setPosition(win_size / 2);
     m_pLayer->addChild(bg);
+
+    return true;
 }

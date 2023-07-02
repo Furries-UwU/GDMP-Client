@@ -36,7 +36,7 @@ protected:
 
     void disconnectButtonCallback(cocos2d::CCObject *);
 
-    cocos2d::CCArray* getRoomListing();
+    cocos2d::CCArray *getRoomListing();
 
     cocos2d::CCLabelBMFont *connectionStatus;
     CCTextInputNode *ipInput;
@@ -53,35 +53,40 @@ class RoomListCell : public CCLayer, public FLAlertLayerProtocol {
 protected:
     float m_width;
     float m_height;
-    CCLayer* m_layer;
+    CCLayer *m_layer;
 
-    bool init(CCLayer* layer, CCSize const& size);
+    bool init(CCLayer *layer, CCSize const &size);
+
     void draw() override;
 };
 
 class RoomCell : public RoomListCell {
 protected:
     Room roomInfo;
-    CCLabelBMFont* roomName;
-    CCLabelBMFont* hostName;
-    CCLayer* theLayer;
+    CCLabelBMFont *roomName;
+    CCLabelBMFont *hostName;
+    CCLayer *theLayer;
 
-    MultiplayerLayer* theOriginalLayer;
+    MultiplayerLayer *theOriginalLayer;
 
-    bool init(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected);
+    bool init(Room info, MultiplayerLayer *originalLayer, CCSize const &size, bool selected);
 
-    virtual void FLAlert_Clicked(FLAlertLayer*, bool btn2);
+    virtual void FLAlert_Clicked(FLAlertLayer *, bool btn2);
+
 public:
-    static RoomCell* create(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected);
-    void onSet(CCObject*);
-    void deleteSong(CCObject*);
+    static RoomCell *create(Room info, MultiplayerLayer *originalLayer, CCSize const &size, bool selected);
+
+    void onSet(CCObject *);
+
+    void deleteSong(CCObject *);
 };
 
 class RoomPage : public FLAlertLayer {
 public:
-    CCLabelBMFont* m_path_label;
+    CCLabelBMFont *m_path_label;
     Room room;
 
-    static RoomPage* create(Room roomInfo, int state);
+    static RoomPage *create(Room roomInfo, int state);
+
     bool init(Room roomInfo, int state);
 };
