@@ -1,6 +1,6 @@
 #include "layer/MultiplayerLayer.hpp"
 
-bool RoomListCell::init(CCLayer* layer, CCSize const& size) {
+bool RoomListCell::init(CCLayer *layer, CCSize const &size) {
     m_width = size.width;
     m_height = size.height;
     m_layer = layer;
@@ -9,24 +9,29 @@ bool RoomListCell::init(CCLayer* layer, CCSize const& size) {
 }
 
 void RoomListCell::draw() {
-    reinterpret_cast<StatsCell*>(this)->StatsCell::draw();
+    reinterpret_cast<StatsCell *>(this)->StatsCell::draw();
 }
 
-bool RoomCell::init(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
+bool RoomCell::init(Room info, MultiplayerLayer *originalLayer, CCSize const &size, bool selected) {
     if (!RoomListCell::init(originalLayer, size)) return false;
 
     this->roomInfo = info;
     this->theOriginalLayer = originalLayer;
 
-    CCMenuItemSpriteExtra* button;
+    CCMenuItemSpriteExtra *button;
 
     if (selected) {
         auto sprite = ButtonSprite::create("View", "goldFont.fnt", "GJ_button_02.png");
-        button = CCMenuItemSpriteExtra::create(sprite, this, menu_selector(RoomCell::onSet));
-    }
-    else {
         button = CCMenuItemSpriteExtra::create(
-            ButtonSprite::create("View"), this, menu_selector(RoomCell::onSet)
+                sprite,
+                this,
+                menu_selector(RoomCell::onSet)
+        );
+    } else {
+        button = CCMenuItemSpriteExtra::create(
+                ButtonSprite::create("View"),
+                this,
+                menu_selector(RoomCell::onSet)
         );
     }
     button->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -55,11 +60,11 @@ bool RoomCell::init(Room info, MultiplayerLayer* originalLayer, CCSize const& si
     playerSprite->setScale(0.4f);
     playerSprite->setPosition({102, 19});
 
-    std::string players =
-        std::to_string(roomInfo.currentPlayers) + "/" + std::to_string(roomInfo.playerCapacity);
+    std::string players = std::to_string(roomInfo.currentPlayers) + "/" + std::to_string(roomInfo.playerCapacity);
     auto playerData = CCLabelBMFont::create(players.c_str(), "bigFont.fnt");
     playerData->setScale(0.4f);
     playerData->setPosition({133, 20});
+
 
     this->theLayer->addChild(this->hostName);
     this->theLayer->addChild(this->roomName);
@@ -78,9 +83,11 @@ bool RoomCell::init(Room info, MultiplayerLayer* originalLayer, CCSize const& si
     return true;
 }
 
-void RoomCell::onSet(CCObject* target) {}
+void RoomCell::onSet(CCObject *target) {
 
-RoomCell* RoomCell::create(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
+}
+
+RoomCell *RoomCell::create(Room info, MultiplayerLayer *originalLayer, CCSize const &size, bool selected) {
     auto ret = new RoomCell();
     if (ret && ret->init(info, originalLayer, size, selected)) {
         return ret;
@@ -89,8 +96,8 @@ RoomCell* RoomCell::create(Room info, MultiplayerLayer* originalLayer, CCSize co
     return nullptr;
 }
 
-void RoomCell::FLAlert_Clicked(FLAlertLayer* layer, bool btn2) {
+void RoomCell::FLAlert_Clicked(FLAlertLayer *layer, bool btn2) {
     if (btn2) {
-        // this->theOriginalLayer->deleteSong(this->m_Room);
+        //this->theOriginalLayer->deleteSong(this->m_Room);
     }
 }
