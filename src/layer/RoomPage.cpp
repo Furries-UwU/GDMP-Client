@@ -22,4 +22,6 @@ bool RoomPage::init(Room roomInfo, int state) {
     bg->setContentSize(window_size);
     bg->setPosition(win_size / 2);
     m_pLayer->addChild(bg);
+
+    return true;
 }

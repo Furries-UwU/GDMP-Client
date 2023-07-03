@@ -48,7 +48,7 @@ bool RoomCell::init(Room info, MultiplayerLayer *originalLayer, CCSize const &si
 
     this->roomName = CCLabelBMFont::create(roomInfo.roomName.c_str(), "bigFont.fnt");
     this->roomName->limitLabelWidth(240.f, 0.8f, 0.1f);
-    this->roomName->setScale(0.6);
+    this->roomName->setScale(0.6f);
 
     if (selected) {
         this->roomName->setColor(ccc3(188, 254, 206));
@@ -58,28 +58,28 @@ bool RoomCell::init(Room info, MultiplayerLayer *originalLayer, CCSize const &si
     this->hostName->limitLabelWidth(240.f, 0.7f, 0.1f);
 
     auto playerSprite = CCSprite::createWithSpriteFrameName("accountBtn_friends_001.png");
-    playerSprite->setScale(0.4);
+    playerSprite->setScale(0.4f);
     playerSprite->setPosition({102, 20});
 
     std::string players = std::to_string(roomInfo.currentPlayers) + "/" + std::to_string(roomInfo.playerCapacity);
     auto playerData = CCLabelBMFont::create(players.c_str(), "bigFont.fnt");
-    playerData->setScale(0.4);
+    playerData->setScale(0.4f);
     playerData->setPosition({132, 20});
 
     auto lockSprite = CCSprite::createWithSpriteFrameName("GJLargeLock_001.png");
-    lockSprite->setScale(0.2);
+    lockSprite->setScale(0.2f);
     lockSprite->setPosition({162, 20});
 
     auto lockData = CCLabelBMFont::create(roomInfo.passProtected ? "Locked" : "Unlocked", "bigFont.fnt");
-    lockData->setScale(0.4);
+    lockData->setScale(0.4f);
     lockData->setPosition({202, 20});
 
     auto levelSprite = CCSprite::createWithSpriteFrameName("GJ_playBtn2_001.png");
-    levelSprite->setScale(0.2);
+    levelSprite->setScale(0.2f);
     levelSprite->setPosition({250, 20});
 
     auto levelData = CCLabelBMFont::create(std::to_string(roomInfo.levelID).c_str(), "bigFont.fnt");
-    levelData->setScale(0.4);
+    levelData->setScale(0.4f);
     levelData->setPosition({272, 20});
 
     this->theLayer->addChild(this->hostName);
