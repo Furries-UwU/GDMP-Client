@@ -169,7 +169,7 @@ bool MultiplayerLayer::init() {
             menu_selector(MultiplayerLayer::backButtonCallback)
     );
 
-    auto backgroundSprite = CCSprite::create("game_bg_01_001-uhd.png");
+    auto backgroundSprite = CCSprite::create("game_bg_01_001.png");
     auto backgroundSize = backgroundSprite->getContentSize();
 
     backgroundSprite->setScaleX(winSize.width / backgroundSize.width);
