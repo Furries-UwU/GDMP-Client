@@ -148,7 +148,7 @@ using namespace geode::prelude;
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
                         executeInGDThread(
-                                [pos_p1_x, pos_p1_y, rot_p1, scale_p1, iconID_p1, button_p1, iconType_p1, p1]() {
+                                [pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
                                     p1->setPosition({pos_p1_x, pos_p1_y});
                                     p1->setRotation(rot_p1);
                                     p1->setScale(scale_p1);
