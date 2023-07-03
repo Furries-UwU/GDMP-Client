@@ -49,10 +49,10 @@ if (USE_PROTOBUF_CPM)
             GITHUB_REPOSITORY protocolbuffers/protobuf
             OPTIONS "protobuf_INSTALL OFF" "protobuf_BUILD_TESTS OFF" "BUILD_SHARED_LIBS OFF")
 
-    include(${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
+    include(${protobuf_BINARY_DIR}/cmake/protobuf-generate.cmake)
 
     set(PROTOBUF_LIBRARY libprotobuf)
-    set(Protobuf_INCLUDE_DIRS ${protobuf_SOURCE_DIR}/src ${protobuf_SOURCE_DIR}/third_party/abseil-cpp)
+    set(Protobuf_INCLUDE_DIRS ${protobuf_SOURCE_DIR}/src)
 endif ()
 
 if (NOT protobuf_ADDED)
