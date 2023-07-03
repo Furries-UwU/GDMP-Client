@@ -1,5 +1,7 @@
 # GDMP-Client
 
+Client | [Server](https://github.com/Furries-UwU/GDMP-Server)
+
 This is where she makes a mod.
 
 ## Build Instructions
