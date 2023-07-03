@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "layer/MultiplayerLayer.hpp"
 #include "include.hpp"
+#include "layer/MultiplayerLayer.hpp"
 #include "utils.hpp"
 
 std::vector<std::function<void()>> functionQueue;
@@ -15,6 +15,8 @@ void executeInGDThread(std::function<void()> f) {
     std::lock_guard<std::mutex> lock(threadMutex);
     functionQueue.push_back(std::move(f));
 }
+
+// clang-format off
 
 class $modify(cocos2d::CCScheduler) {
     void update(float dt) {
@@ -55,10 +57,10 @@ class $modify(MenuLayer) {
 };
 
 class $modify(PlayLayer) {
-    bool init(GJGameLevel *level) {
+    bool init(GJGameLevel* level) {
         if (!PlayLayer::init(level)) return false;
 
-        Global *global = Global::get();
+        auto global = Global::get();
 
         fmt::print("level id {}\n", level->m_levelID.value());
 
@@ -117,7 +119,7 @@ class $modify(PlayLayer) {
             packet->set_allocated_player_join(player_join);
 
             size_t size = packet->ByteSizeLong();
-            void *buffer = malloc(size);
+            void* buffer = malloc(size);
             packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
             free(buffer);
@@ -129,7 +131,7 @@ class $modify(PlayLayer) {
     }
 
     void onQuit() {
-        Global *global = Global::get();
+        auto global = Global::get();
         for (auto &item: global->players) {
             item.second.p1->removeMeAndCleanup();
         }
@@ -148,7 +150,7 @@ class $modify(PlayLayer) {
             packet->set_allocated_player_leave(leavePacket);
 
             size_t size = packet->ByteSizeLong();
-            void *buffer = malloc(size);
+            void* buffer = malloc(size);
             packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size, ENET_PACKET_FLAG_RELIABLE);
             free(buffer);
@@ -162,7 +164,7 @@ class $modify(PlayLayer) {
     void update(float p0) {
         PlayLayer::update(p0);
 
-        Global *global = Global::get();
+        auto global = Global::get();
 
         if (global->connected) {
             auto packet = new gdmp::Packet();
@@ -187,7 +189,7 @@ class $modify(PlayLayer) {
             packet->set_allocated_player_move(player_move);
 
             size_t size = packet->ByteSizeLong();
-            void *buffer = malloc(size);
+            void* buffer = malloc(size);
             packet->SerializeToArray(buffer, size);
             auto enetPacket = enet_packet_create(buffer, size,
                                                  ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT); /* is this how u do unreliable packets? */
@@ -200,14 +202,22 @@ class $modify(PlayLayer) {
 
 class $modify(GJBaseGameLayer) {
     void pushButton(int i, bool pl) {
-        if (pl) Global::get()->P1_pushing = true;
-        if (!pl) Global::get()->P2_pushing = true;
         GJBaseGameLayer::pushButton(i, pl);
+
+        auto global = Global::get();
+
+        if (pl) global->P1_pushing = true;
+        if (!pl) global->P2_pushing = true;
     }
 
     void releaseButton(int i, bool pl) {
-        if (pl) Global::get()->P1_pushing = false;
-        if (!pl) Global::get()->P2_pushing = false;
         GJBaseGameLayer::releaseButton(i, pl);
+
+        auto global = Global::get();
+
+        if (pl) global->P1_pushing = false;
+        if (!pl) global->P2_pushing = false;
     }
 };
+
+// clang-format on
