@@ -47,7 +47,7 @@ if (USE_PROTOBUF_CPM)
             NAME protobuf
             VERSION 21.12
             GITHUB_REPOSITORY protocolbuffers/protobuf
-            OPTIONS "BUILD_SHARED_LIBS OFF" "protobuf_BUILD_TESTS OFF" "protobuf_BUILD_LIBPROTOC ON")
+            OPTIONS "protobuf_INSTALL OFF" "protobuf_BUILD_TESTS OFF" "BUILD_SHARED_LIBS OFF")
 
     include(${protobuf_SOURCE_DIR}/cmake/protobuf-generate.cmake)
 
