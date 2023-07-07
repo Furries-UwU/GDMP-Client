@@ -8,10 +8,6 @@ option(USE_PREBUILT_PROTOBUF "Whenever to use prebuilt protobuf libraries or not
 
 include(cmake/CPM.cmake)
 
-if (WIN32 OR MING1W)
-    add_compile_definitions(WIN32_LEAN_AND_MEAN)
-endif ()
-
 if (USE_PREBUILT_PROTOBUF)
     if (WIN32)
         set(PREBUILT_PROTOBUF_FOLDER_NAME win32)
@@ -42,6 +38,18 @@ elseif (APPLE)
     set(USE_PROTOBUF_CPM ON)
 endif ()
 
+CPMAddPackage(
+        NAME libzmq
+        VERSION 4.3.4
+        GITHUB_REPOSITORY zeromq/libzmq
+        OPTIONS "ZMQ_BUILD_TESTS OFF")
+
+CPMAddPackage(
+        NAME cppzmq
+        VERSION 4.10.0
+        GITHUB_REPOSITORY zeromq/cppzmq
+        OPTIONS "CPPZMQ_BUILD_TESTS OFF")
+
 if (USE_PROTOBUF_CPM)
     CPMAddPackage(
             NAME protobuf
@@ -61,11 +69,10 @@ endif ()
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.c)
 
-add_subdirectory(external/enet)
 add_library(${PROJECT_NAME} SHARED ${SOURCES} proto/packet.proto)
 protobuf_generate(TARGET ${PROJECT_NAME} LANGUAGE cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} external/enet/include ${Protobuf_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/proto)
+target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} ${libzmq_INCLUDE_DIRS} ${cppzmq_INCLUDE_DIRS} ${Protobuf_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/proto)
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
@@ -77,5 +84,5 @@ add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 # Set up dependencies, resources, link Geode
 setup_geode_mod(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} enet ${PROTOBUF_LIBRARY})
+target_link_libraries(${PROJECT_NAME} libzmq ${PROTOBUF_LIBRARY})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

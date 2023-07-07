@@ -3,8 +3,8 @@
 #include "include.hpp"
 
 struct Player {
-    PlayerObject* p1 = nullptr;
-    PlayerObject* p2 = nullptr;
+    PlayerObject *p1 = nullptr;
+    PlayerObject *p2 = nullptr;
 
     uint32_t cube   = 0;
     uint32_t ship   = 0;
@@ -17,8 +17,9 @@ struct Player {
 
 class Global {
 public:
-    ENetHost* host = nullptr;
-    ENetPeer* peer = nullptr;
+    zmq::context_t *zmg_ctx = nullptr;
+    zmq::socket_t *zmg_push = nullptr;
+    zmq::socket_t *zmg_pull = nullptr;
 
     bool connected = false;
 
@@ -27,5 +28,5 @@ public:
 
     std::unordered_map<uint64_t, Player> players;
 
-    static Global* get();
+    static Global *get();
 };

@@ -56,6 +56,6 @@ cmake --build . --config Release
 - [Geode](https://geode-sdk.org/), the modding framework this mod uses <3
 - [Protocol Buffers](https://github.com/protocolbuffers/protobuf) for (de)serialization of data and shared data
   structures
-- [ENet](https://github.com/lsalzman/enet), the networking library
+- [ZeroMQ](https://zeromq.org/), the networking library
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) for making CMake dependency management easier
 - [CMake](https://cmake.org/), for making me suffer
