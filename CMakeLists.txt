@@ -53,9 +53,9 @@ CPMAddPackage(
         DOWNLOAD_ONLY YES
         OPTIONS "CPPZMQ_BUILD_TESTS OFF")
 
-if (USE_PROTOBUF_CPM)
-    # Heavy Dependency
+# Heavy Dependency
 
+if (USE_PROTOBUF_CPM)
     CPMAddPackage(
             NAME protobuf
             VERSION 21.12
