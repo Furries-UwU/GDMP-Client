@@ -38,11 +38,13 @@ elseif (APPLE)
     set(USE_PROTOBUF_CPM ON)
 endif ()
 
+# Light Dependency
+
 CPMAddPackage(
         NAME libzmq
         VERSION 4.3.4
         GITHUB_REPOSITORY zeromq/libzmq
-        OPTIONS "ZMQ_BUILD_TESTS OFF")
+        OPTIONS "ZMQ_BUILD_TESTS OFF" "WITH_TLS OFF" "ENABLE_CURVE OFF")
 
 CPMAddPackage(
         NAME cppzmq
@@ -52,6 +54,8 @@ CPMAddPackage(
         OPTIONS "CPPZMQ_BUILD_TESTS OFF")
 
 if (USE_PROTOBUF_CPM)
+    # Heavy Dependency
+
     CPMAddPackage(
             NAME protobuf
             VERSION 21.12
