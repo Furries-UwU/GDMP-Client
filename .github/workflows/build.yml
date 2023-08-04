@@ -10,7 +10,6 @@ env:
   CLI_VERSION: v2.4.3
   GEODE_VERSION: v1.0.2
   PREBUILT_PROTOBUF_VERSION: v21.12
-  SDK_VERSION: v1.0.2
   MOD_NAME: GDMP
   MOD_ID: gay.rooot.gdmp
 
@@ -46,7 +45,7 @@ jobs:
         with:
           submodules: recursive
           repository: geode-sdk/geode
-          ref: ${{ env.SDK_VERSION }}
+          ref: ${{ env.GEODE_VERSION }}
           path: ${{ env.GEODE_SDK }}
 
       - uses: actions/checkout@v3
