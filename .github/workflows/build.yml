@@ -73,6 +73,7 @@ jobs:
           mkdir bin/nightly
           cd bin/nightly
           curl -L https://github.com/geode-sdk/geode/releases/download/${{ env.GEODE_VERSION }}/geode-${{ env.GEODE_VERSION }}-${{ matrix.config.platform_suffix }}.zip -o geode-sdk.zip
+          ls
           tar -xf geode-sdk.zip
 
       - name: Configure CMake
