@@ -7,9 +7,7 @@
 #include "include.hpp"
 
 #if __APPLE__ && TARGET_OS_MAC
-
     #include "thread"
-
 #endif
 
 using namespace geode::prelude;
