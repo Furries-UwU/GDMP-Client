@@ -1,5 +1,5 @@
-[submodule "external/enet"]
-	path = external/enet
+[submodule "vendor/enet"]
+	path = vendor/enet
 	url = https://github.com/Furries-UwU/enet
 [submodule "proto"]
 	path = proto
