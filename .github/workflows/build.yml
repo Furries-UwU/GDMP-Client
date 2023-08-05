@@ -8,7 +8,7 @@ on:
 env:
   GEODE_SDK: ${{ github.workspace }}/sdk
   CLI_VERSION: v2.4.3
-  GEODE_VERSION: v1.0.2
+  GEODE_VERSION: v1.0.3
   PREBUILT_PROTOBUF_VERSION: v21.12
   MOD_NAME: GDMP
   MOD_ID: gay.rooot.gdmp
