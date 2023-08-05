@@ -119,12 +119,10 @@ using namespace geode::prelude;
                             p1->setRotation(rot_p1);
                             p1->setScale(scale_p1);
                             if (!global->P1_pushing && button_p1) {
-//                                ??
-//                                p1->pushButton(PlayerButton::BUTTON_1);
+                                p1->pushButton(static_cast<PlayerButton>(1));
                             }
                             else if (global->P1_pushing && !button_p1) {
-//                                ??
-//                                p1->releaseButton(PlayerButton::BUTTON_1);
+                                p1->releaseButton(static_cast<PlayerButton>(1));
                             }
                         });
                     }
