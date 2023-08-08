@@ -32,9 +32,10 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          combine: true
+          configure-args: '-DUSE_PREBUILT_PROTOBUF=1'
           sdk: ${{ env.GEODE_SDK }}
           cli: ${{ env.CLI_VERSION }}
+          combine: true
       
   package:
     name: Package builds
