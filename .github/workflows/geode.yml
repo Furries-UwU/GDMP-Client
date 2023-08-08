@@ -48,8 +48,8 @@ jobs:
         with:
           configure-args: '-DUSE_PREBUILT_PROTOBUF=1 -DGEODE_DISABLE_CLI_CALLS=1'
           build-args: '-j 16'
-          sdk: ${{ env.GEODE_SDK }}
           cli: ${{ env.CLI_VERSION }}
+          sdk: ${{ env.GEODE_VERSION }}
           combine: true
       
   package:
