@@ -9,6 +9,7 @@ on:
 env:
   CLI_VERSION: v2.4.4
   GEODE_VERSION: v1.0.3
+  PREBUILT_PROTOBUF_VERSION: v21.12
 
 jobs:
   build:
@@ -28,6 +29,19 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          ref: 'prebuilt-protobuf'
+          path: "prebuilt_protobuf"
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          repository: 'protocolbuffers/protobuf'
+          ref: ${{ env.PREBUILT_PROTOBUF_VERSION }}
+          path: "prebuilt_protobuf/src"
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
