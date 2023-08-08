@@ -8,7 +8,7 @@ on:
 
 env:
   CLI_VERSION: v2.4.4
-  GEODE_VERSION: nightly
+  SDK_VERSION: nightly
   PREBUILT_PROTOBUF_VERSION: v21.12
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
           configure-args: '-DUSE_PREBUILT_PROTOBUF=1'
           build-args: '-j 16'
           cli: ${{ env.CLI_VERSION }}
-          sdk: ${{ env.GEODE_VERSION }}
+          sdk: ${{ env.SDK_VERSION }}
           combine: true
       
   package:
