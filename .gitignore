@@ -39,24 +39,18 @@
 *.tmPreferences.cache
 *.stTheme.cache
 
-# Workspace files are user-specific
-*.sublime-workspace
-
-# I need to find a way to automatically remove this
-Source/Geode/pkg/uber-apk-signer.jar
-
 # Ignore build folders
 **/build
 
+# Workspace files are user-specific
+*.sublime-workspace
+
 # ILY vscode
 **/.vscode
+.idea/
 
-# cmake
-cmake-build-*/
-.cmake
-
-# im out of IDEAs
-.idea
+# clangd
+.cache/
 
 # prebuilt protobuf libs
 protobuf_win32/
