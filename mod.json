@@ -5,5 +5,10 @@
   "name":         "gdmp",
   "developer":    "rooot xhayper ninXout",
   "description":  "free and open-sourced multiplayer mod",
+  "repository":   "https://github.com/Furries-UwU/GDMP-Client",
+  "issues": {
+    "info":       "idek",
+    "url":        "https://github.com/Furries-UwU/GDMP-Client/issues"
+  },
   "binary":       "gdmp"
 }
