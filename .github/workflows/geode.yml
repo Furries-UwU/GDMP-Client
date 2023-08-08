@@ -46,7 +46,7 @@ jobs:
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          configure-args: '-DUSE_PREBUILT_PROTOBUF=1 -DGEODE_DISABLE_CLI_CALLS=1'
+          configure-args: '-DUSE_PREBUILT_PROTOBUF=1'
           build-args: '-j 16'
           cli: ${{ env.CLI_VERSION }}
           sdk: ${{ env.GEODE_VERSION }}
