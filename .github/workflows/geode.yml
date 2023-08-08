@@ -7,7 +7,7 @@ on:
       - "main"
 
 env:
-  CLI_VERSION: v2.4.3
+  CLI_VERSION: v2.4.4
   GEODE_VERSION: v1.0.3
 
 jobs:
