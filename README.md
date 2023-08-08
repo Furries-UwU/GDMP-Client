@@ -1,6 +1,6 @@
 # GDMP-Client
 
-Client | [Server](https://github.com/Furries-UwU/GDMP-Server)
+Client | [Server](https://github.com/Furries-UwU/GDMP-Server#gdmp-server)
 
 This is where she makes a mod.
 
