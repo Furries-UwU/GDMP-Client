@@ -8,7 +8,7 @@ on:
 
 env:
   CLI_VERSION: v2.4.4
-  SDK_VERSION: v1.1.0
+  SDK_VERSION: v1.3.0
   PREBUILT_PROTOBUF_VERSION: v21.12
 
 jobs:
