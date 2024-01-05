@@ -52,7 +52,7 @@ using namespace geode::prelude;
                             ));
                             //p1->m_iconGlow->setVisible(glowy); // todo
 
-                            playLayer->addChild(p1); // todo
+                            playLayer->m_objectLayer->addChild(p1);
 
                             Player p{
                                 p1,
