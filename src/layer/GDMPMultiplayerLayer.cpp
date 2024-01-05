@@ -1,0 +1,225 @@
+/*
+ * When people ask "why did you make this mod?", I tell 'em, "for fun"
+ */
+
+#include "layer/GDMPMultiplayerLayer.hpp"
+
+using namespace geode::prelude;
+
+// TODO: Rewrite this entire thing
+
+void GDMPMultiplayerLayer::disconnectButtonCallback(CCObject* object) {
+    auto global = Global::get();
+
+    if (global->peer) return enet_peer_disconnect(global->peer, 0);
+}
+
+void GDMPMultiplayerLayer::connectButtonCallback(CCObject* object) {
+    auto global = Global::get();
+
+    if (global->peer) enet_peer_disconnect(global->peer, 0);
+
+    ENetAddress addr;
+    enet_address_set_host(&addr, "rooot.gay");
+    addr.port = std::stoi("34154");
+
+    global->peer = enet_host_connect(global->host, &addr, 1, 0);
+    if (!global->peer) {
+        Notification::create("Failed to connect to the server!", NotificationIcon::Error)->show();
+        return;
+    };
+}
+
+cocos2d::CCArray* GDMPMultiplayerLayer::getRoomListing() {
+    cocos2d::CCArray* array = cocos2d::CCArray::create();
+    array->addObject(RoomCell::create(
+        {false, "i dont know", false, 10, 10, 736, "ninXout", "a room thats full"}, this, {400, 68}, false
+    ));
+    array->addObject(RoomCell::create(
+        {false, "i dont know", false, 10, 4, 166, "ninXout", "a room that isn't full"}, this, {400, 68}, false
+    ));
+    return array;
+}
+
+GDMPMultiplayerLayer* GDMPMultiplayerLayer::create() {
+    auto ret = new GDMPMultiplayerLayer();
+    if (ret && ret->init()) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
+
+bool GDMPMultiplayerLayer::init() {
+    if (!CCLayer::init()) return false;
+
+    auto global = Global::get();
+
+    auto director = CCDirector::get();
+    auto winSize = director->getWinSize();
+
+    auto cells = this->getRoomListing();
+
+    auto listLayer = CCLayer::create();
+    auto list = ListView::create(cells, 60, 400, 190);
+
+    list->setPositionY(-10.f);
+
+    auto sideLeft = CCSprite::createWithSpriteFrameName("GJ_table_side_001.png");
+    sideLeft->setAnchorPoint(ccp(0, 0));
+    sideLeft->setScaleY(2.475f);
+    sideLeft->setScaleX(1.2f);
+    sideLeft->setPosition({-30, 24});
+    sideLeft->setZOrder(9);
+
+    auto sideTop = CCSprite::createWithSpriteFrameName("GJ_table_top02_001.png");
+    sideTop->setAnchorPoint(ccp(0, 0));
+    sideTop->setScaleX(1.15f);
+    sideTop->setScaleY(1.5f);
+    sideTop->setPosition(ccp(-29.f, 164.f));
+    sideTop->setZOrder(9);
+
+    auto sideBottom = CCSprite::createWithSpriteFrameName("GJ_table_bottom_001.png");
+    // sideBottom->setFlipY(true);
+    sideBottom->setAnchorPoint(ccp(0, 0));
+    sideBottom->setPosition(ccp(-24.f, -17.f));
+    sideBottom->setScaleX(1.14f);
+    sideBottom->setZOrder(10);
+
+    auto sideRight = CCSprite::createWithSpriteFrameName("GJ_table_side_001.png");
+    sideRight->setFlipX(true);
+    sideRight->setScaleY(2.475f);
+    sideRight->setScaleX(1.2f);
+    sideRight->setAnchorPoint(ccp(0, 0));
+    sideRight->setPosition({389, 22});
+    sideRight->setZOrder(9);
+
+    listLayer->addChild(sideLeft);
+    listLayer->addChild(sideTop);
+    listLayer->addChild(sideBottom);
+    listLayer->addChild(sideRight);
+    listLayer->addChild(list);
+    listLayer->setPosition(winSize / 2 - list->getScaledContentSize() / 2);
+    addChild(listLayer);
+
+    auto label = CCLabelBMFont::create("Multiplayer", "goldFont.fnt");
+    label->setPosition(ccp(director->getWinSize().width / 2, director->getWinSize().height - 25));
+    addChild(label);
+
+    /*
+        auto ipLabel = CCLabelBMFont::create("IP", "bigFont.fnt");
+        ipLabel->setPosition(ccp((director->getWinSize().width / 2) - 150,
+                                 (director->getWinSize().height / 2) + 50));
+        addChild(ipLabel);
+
+        auto portLabel = CCLabelBMFont::create("Port", "bigFont.fnt");
+        portLabel->setPosition(ccp((director->getWinSize().width / 2) + 150,
+                                   (director->getWinSize().height / 2) + 50));
+        addChild(portLabel);
+
+        ipInput = CCTextInputNode::create(100, 100, "Address", "bigFont.fnt");
+        ipInput->setPosition(ccp((director->getWinSize().width / 2) - 150,
+                                 director->getWinSize().height / 2));
+        ipInput->setAllowedChars("0123456789abcdefghijklmnopqrstuvwxyz.-");
+        ipInput->setString("rooot.gay");
+        addChild(ipInput);
+
+        portInput = CCTextInputNode::create(100, 100, "Port", "bigFont.fnt");
+        portInput->setPosition(ccp((director->getWinSize().width / 2) + 150,
+                                   director->getWinSize().height / 2));
+        portInput->setAllowedChars("0123456789");
+        portInput->setString("34154");
+        addChild(portInput);
+    */
+
+    connectionStatus = CCLabelBMFont::create(
+        fmt::format("Status: {}", global->connected ? "Connected" : "Not connected").c_str(),
+        "bigFont.fnt"
+    );
+    connectionStatus->setPosition(
+        ccp((director->getWinSize().width / 2), (director->getWinSize().height / 2) - 120)
+    );
+    connectionStatus->setScaleX(0.5);
+    connectionStatus->setScaleY(0.5);
+    addChild(connectionStatus);
+
+    auto disconnectButtonSprite = CCSprite::createWithSpriteFrameName("GJ_stopEditorBtn_001.png");
+
+    auto connectButtonSprite = CCSprite::createWithSpriteFrameName("GJ_playBtn2_001.png");
+    connectButtonSprite->setScaleX(0.5);
+    connectButtonSprite->setScaleY(0.5);
+
+    auto disconnectButton = CCMenuItemSpriteExtra::create(
+        disconnectButtonSprite, this, menu_selector(GDMPMultiplayerLayer::disconnectButtonCallback)
+    );
+
+    auto connectButton = CCMenuItemSpriteExtra::create(
+        connectButtonSprite, this, menu_selector(GDMPMultiplayerLayer::connectButtonCallback)
+    );
+
+    auto backButton = CCMenuItemSpriteExtra::create(
+        CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png"),
+        this,
+        menu_selector(GDMPMultiplayerLayer::backButtonCallback)
+    );
+
+    auto backgroundSprite = CCSprite::create("game_bg_01_001.png");
+    auto backgroundSize = backgroundSprite->getContentSize();
+
+    backgroundSprite->setScaleX(winSize.width / backgroundSize.width);
+    backgroundSprite->setScaleY(winSize.height / backgroundSize.height);
+    backgroundSprite->setAnchorPoint({0, 0});
+    backgroundSprite->setColor({40, 125, 255});
+
+    backgroundSprite->setZOrder(-1);
+    addChild(backgroundSprite);
+
+    auto menu = CCMenu::create();
+    menu->addChild(backButton);
+    menu->setPosition({25, winSize.height - 25});
+    addChild(menu);
+
+    menu = CCMenu::create();
+    menu->addChild(connectButton);
+    menu->setPosition({(winSize.width / 2) - 50, winSize.height / 2 - 75});
+    addChild(menu);
+
+    menu = CCMenu::create();
+    menu->addChild(disconnectButton);
+    menu->setPosition({(winSize.width / 2) + 50, winSize.height / 2 - 75});
+    addChild(menu);
+
+    setKeypadEnabled(true);
+
+    scheduleUpdate();
+
+    return true;
+}
+
+void exitMenu() {
+    CCDirector::sharedDirector()->popSceneWithTransition(0.5f, PopTransition::kPopTransitionFade);
+}
+
+void GDMPMultiplayerLayer::keyBackClicked() {
+    exitMenu();
+}
+
+void GDMPMultiplayerLayer::backButtonCallback(CCObject* object) {
+    exitMenu();
+}
+
+void GDMPMultiplayerLayer::switchToCustomLayerButton(CCObject* object) {
+    auto layer = GDMPMultiplayerLayer::create();
+    auto scene = CCScene::create();
+    scene->addChild(layer);
+
+    CCDirector::sharedDirector()->pushScene(CCTransitionFade::create(0.5f, scene));
+}
+
+void GDMPMultiplayerLayer::update(float dt) {
+    auto global = Global::get();
+    connectionStatus->setString(
+        fmt::format("Status: {}", global->connected ? "Connected" : "Not connected").c_str()
+    );
+}
