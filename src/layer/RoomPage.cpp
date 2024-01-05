@@ -1,4 +1,4 @@
-#include "layer/MultiplayerLayer.hpp"
+#include "layer/GDMPMultiplayerLayer.hpp"
 
 static RoomPage* create(Room roomInfo, int state) {
     auto node = new RoomPage;

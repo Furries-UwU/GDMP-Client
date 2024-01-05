@@ -5,7 +5,7 @@
 #pragma once
 
 #include "include.hpp"
-#include "layer/MultiplayerLayer.hpp"
+#include "layer/GDMPMultiplayerLayer.hpp"
 #include "utils.hpp"
 
 std::vector<std::function<void()>> functionQueue;
@@ -44,7 +44,7 @@ class $modify(MenuLayer) {
         auto button = CCMenuItemSpriteExtra::create(
                 buttonSprite,
                 this,
-                menu_selector(MultiplayerLayer::switchToCustomLayerButton));
+                menu_selector(GDMPMultiplayerLayer::switchToCustomLayerButton));
 
         auto menu = cocos2d::CCMenu::create();
         menu->addChild(button);
@@ -57,8 +57,8 @@ class $modify(MenuLayer) {
 };
 
 class $modify(PlayLayer) {
-    bool init(GJGameLevel* level) {
-        if (!PlayLayer::init(level)) return false;
+    bool init(GJGameLevel* level, bool p1, bool p2) {
+        if (!PlayLayer::init(level, p1, p2)) return false;
 
         auto global = Global::get();
 
@@ -92,9 +92,9 @@ class $modify(PlayLayer) {
             uint32_t secondaryColor = 0;
 
             // hope this works c:
-            if (this->m_player1->m_iconSprite) {
+            /*if (this->m_player1->m_iconSprite) {
                 secondaryColor = getIntFromCCColor(this->m_player1->m_iconSprite->getColor());
-            }
+            }*/
 #endif
 
             color_p1.set_primary(getIntFromCCColor(this->m_player1->getColor()));
@@ -131,9 +131,10 @@ class $modify(PlayLayer) {
     }
 
     void onQuit() {
+        fmt::print("onQuit\n");
         auto global = Global::get();
         for (auto &item: global->players) {
-            item.second.p1->removeMeAndCleanup();
+            //item.second.p1->removeMeAndCleanup(); // THIS CRASHES IN 2.2
         }
         global->players.clear();
 
@@ -178,7 +179,7 @@ class $modify(PlayLayer) {
             auto gameMode1 = getGameModeFromGamemode(getGamemodeFromPlayer(this->m_player1));
             player_move->set_gamemode_p1(gameMode1);
 
-            if (this->m_player2 && this->m_isDualMode) {
+            if (this->m_player2 && /*this->m_isDualMode*/ false) { // todo
                 auto pos2 = getPositionDataFromPlayer(this->m_player2);
                 player_move->set_allocated_pos_p2(&pos2);
 
@@ -201,22 +202,13 @@ class $modify(PlayLayer) {
 };
 
 class $modify(GJBaseGameLayer) {
-    void pushButton(int i, bool pl) {
-        GJBaseGameLayer::pushButton(i, pl);
+    void handleButton(bool push, int button, bool player1) {
+        GJBaseGameLayer::handleButton(push, button, player1);
 
         auto global = Global::get();
 
-        if (pl) global->P1_pushing = true;
-        if (!pl) global->P2_pushing = true;
-    }
-
-    void releaseButton(int i, bool pl) {
-        GJBaseGameLayer::releaseButton(i, pl);
-
-        auto global = Global::get();
-
-        if (pl) global->P1_pushing = false;
-        if (!pl) global->P2_pushing = false;
+        if (player1) global->P1_pushing = push;
+        if (!player1) global->P2_pushing = push;
     }
 };
 

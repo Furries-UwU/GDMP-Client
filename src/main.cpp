@@ -27,30 +27,32 @@ using namespace geode::prelude;
 
                         executeInGDThread([player_join]() {
                             auto playLayer = GameManager::sharedState()->getPlayLayer();
+                            auto gameLayer = GameManager::sharedState()->getGameLayer();
                             if (!playLayer) return;
+                            if (!gameLayer) return;
 
                             const auto& visuals = player_join.visual();
 
-                            auto p1 = PlayerObject::create(1, 1, 0);
-                            p1->setPosition({0, 105});
+                            auto p1 = PlayerObject::create(1, 1, gameLayer, gameLayer, false); // meow , (idk)
+                            //p1->setPosition({0, 105}); // todo
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
                             auto glowy = visuals.colors().glowy();
 
-                            p1->setColor(ccc3(
+                            /*p1->setColor(ccc3(
                                 (col_primary_p1 >> 16) & 0xff,
                                 (col_primary_p1 >> 8) & 0xff,
                                 col_primary_p1 & 0xff
-                            ));
+                            ));*/ // todo
                             p1->setSecondColor(ccc3(
                                 (col_secondary_p1 >> 16) & 0xff,
                                 (col_secondary_p1 >> 8) & 0xff,
                                 col_secondary_p1 & 0xff
                             ));
-                            p1->m_iconGlow->setVisible(glowy);
+                            //p1->m_iconGlow->setVisible(glowy); // todo
 
-                            playLayer->getObjectLayer()->addChild(p1);
+                            playLayer->addChild(p1); // todo
 
                             Player p{
                                 p1,
@@ -68,12 +70,8 @@ using namespace geode::prelude;
                             p1->updatePlayerRollFrame(visuals.icon_ball());
                             p1->updatePlayerShipFrame(visuals.icon_ship());
                             p1->updatePlayerFrame(visuals.icon_cube());
-                            p1->updatePlayerRobotFrame(visuals.icon_robot());
-#if __APPLE__ && TARGET_OS_MAC
-                            p1->updatePlayerSpiderFrame(visuals.icon_spider());
-#else
-                            p1->m_spiderSprite->updateFrame(visuals.icon_spider());
-#endif
+                            //p1->updatePlayerRobotFrame(visuals.icon_robot()); // todo
+                            //p1->updatePlayerSpiderFrame(visuals.icon_spider()); // todo
 
                             Global::get()->players[player_join.p_id()] = p;
                         });
@@ -101,20 +99,21 @@ using namespace geode::prelude;
                         auto iconType_p1 =
                             getIconType(getGamemodeFromGameMode(player_move.gamemode_p1()));
 
-                        p1->toggleFlyMode(iconType_p1 == IconType::Ship);
-                        p1->toggleRollMode(iconType_p1 == IconType::Ball);
-                        p1->toggleBirdMode(iconType_p1 == IconType::Ufo);
-                        p1->toggleDartMode(iconType_p1 == IconType::Wave);
-                        p1->toggleRobotMode(iconType_p1 == IconType::Robot);
-                        p1->toggleSpiderMode(iconType_p1 == IconType::Spider);
+                        // TODO: i have no idea what the 2nd bool does
+                        p1->toggleFlyMode(iconType_p1 == IconType::Ship, false);
+                        p1->toggleRollMode(iconType_p1 == IconType::Ball, false);
+                        p1->toggleBirdMode(iconType_p1 == IconType::Ufo, false);
+                        p1->toggleDartMode(iconType_p1 == IconType::Wave, false);
+                        p1->toggleRobotMode(iconType_p1 == IconType::Robot, false);
+                        p1->toggleSpiderMode(iconType_p1 == IconType::Spider, false);
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
                         executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
                             auto global = Global::get();
 
-                            p1->setPosition({pos_p1_x, pos_p1_y});
-                            p1->setRotation(rot_p1);
+                            //p1->setPosition({pos_p1_x, pos_p1_y}); // todo
+                            //p1->setRotation(rot_p1); // todo
                             p1->setScale(scale_p1);
                             if (!global->P1_pushing && button_p1) {
                                 p1->pushButton(static_cast<PlayerButton>(1));

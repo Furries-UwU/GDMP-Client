@@ -1,4 +1,4 @@
-#include "layer/MultiplayerLayer.hpp"
+#include "layer/GDMPMultiplayerLayer.hpp"
 
 bool RoomListCell::init(CCLayer* layer, CCSize const& size) {
     m_width = size.width;
@@ -12,7 +12,7 @@ void RoomListCell::draw() {
     reinterpret_cast<StatsCell*>(this)->StatsCell::draw();
 }
 
-bool RoomCell::init(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
+bool RoomCell::init(Room info, GDMPMultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
     if (!RoomListCell::init(originalLayer, size)) return false;
 
     this->roomInfo = info;
@@ -103,7 +103,7 @@ bool RoomCell::init(Room info, MultiplayerLayer* originalLayer, CCSize const& si
 
 void RoomCell::onSet(CCObject* target) {}
 
-RoomCell* RoomCell::create(Room info, MultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
+RoomCell* RoomCell::create(Room info, GDMPMultiplayerLayer* originalLayer, CCSize const& size, bool selected) {
     auto ret = new RoomCell();
     if (ret && ret->init(info, originalLayer, size, selected)) {
         return ret;
