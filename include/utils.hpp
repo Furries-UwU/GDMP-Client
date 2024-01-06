@@ -14,7 +14,8 @@ enum Gamemode : uint8_t {
     UFO = 4,
     WAVE = 5,
     ROBOT = 6,
-    SPIDER = 7
+    SPIDER = 7,
+    SWING = 8
 };
 
 Gamemode getGamemodeFromPlayer(PlayerObject* player) {
@@ -36,6 +37,9 @@ Gamemode getGamemodeFromPlayer(PlayerObject* player) {
     else if (player->m_isSpider) {
         return Gamemode::SPIDER;
     }
+    else if (player->m_isSwing) {
+        return Gamemode::SWING;
+    }
     else {
         return Gamemode::CUBE;
     }
@@ -51,6 +55,7 @@ gdmp::GameMode getGameModeFromGamemode(Gamemode gamemode) {
         case WAVE: return gdmp::GameMode::WAVE;
         case ROBOT: return gdmp::GameMode::ROBOT;
         case SPIDER: return gdmp::GameMode::SPIDER;
+        case SWING: return gdmp::GameMode::SWING;
     }
 }
 
@@ -63,6 +68,7 @@ Gamemode getGamemodeFromGameMode(gdmp::GameMode gamemode) {
         case gdmp::GameMode::WAVE: return Gamemode::WAVE;
         case gdmp::GameMode::ROBOT: return Gamemode::ROBOT;
         case gdmp::GameMode::SPIDER: return Gamemode::SPIDER;
+        case gdmp::GameMode::SWING: return Gamemode::SWING;
         case gdmp::GameMode::CUBE: [[fallthrough]];
         case gdmp::GameMode_INT_MIN_SENTINEL_DO_NOT_USE_: [[fallthrough]];
         case gdmp::GameMode_INT_MAX_SENTINEL_DO_NOT_USE_: [[fallthrough]];
@@ -78,6 +84,7 @@ IconType getIconType(Gamemode gamemode) {
         case WAVE: return IconType::Wave;
         case ROBOT: return IconType::Robot;
         case SPIDER: return IconType::Spider;
+        case SWING: return IconType::Swing;
         case CUBE: [[fallthrough]];
         default: return IconType::Cube;
     }

@@ -79,6 +79,7 @@ class $modify(PlayLayer) {
             visuals->set_icon_wave(gameManager->getPlayerDart());
             visuals->set_icon_robot(gameManager->getPlayerRobot());
             visuals->set_icon_spider(gameManager->getPlayerSpider());
+            visuals->set_icon_swing(gameManager->getPlayerSwing());
 
             gdmp::Colors color_p1;
             gdmp::Colors color_p2;
