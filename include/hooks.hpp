@@ -162,8 +162,8 @@ class $modify(PlayLayer) {
         PlayLayer::onQuit();
     }
 
-    void update(float p0) {
-        PlayLayer::update(p0);
+    void postUpdate(float p0) {
+        PlayLayer::postUpdate(p0);
 
         auto global = Global::get();
 

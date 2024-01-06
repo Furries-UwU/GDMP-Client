@@ -34,7 +34,7 @@ using namespace geode::prelude;
                             const auto& visuals = player_join.visual();
 
                             auto p1 = PlayerObject::create(1, 1, gameLayer, gameLayer, false); // meow , (idk)
-                            //p1->setPosition({0, 105}); // todo
+                            p1->setPosition({0, 105}); // todo
 
                             auto col_primary_p1 = visuals.colors().color_p1().primary();
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
@@ -112,8 +112,8 @@ using namespace geode::prelude;
                         executeInGDThread([pos_p1_x, pos_p1_y, rot_p1, scale_p1, button_p1, p1]() {
                             auto global = Global::get();
 
-                            //p1->setPosition({pos_p1_x, pos_p1_y}); // todo
-                            //p1->setRotation(rot_p1); // todo
+                            p1->setPosition({pos_p1_x, pos_p1_y}); // todo
+                            p1->setRotation(rot_p1); // todo
                             p1->setScale(scale_p1);
                             if (!global->P1_pushing && button_p1) {
                                 p1->pushButton(static_cast<PlayerButton>(1));

@@ -8,6 +8,8 @@ option(USE_PREBUILT_PROTOBUF "Whenever to use prebuilt protobuf libraries or not
 
 include(cmake/CPM.cmake)
 
+set(GEODE_BINDINGS_REPO_PATH "C:/Users/rooot/Documents/dev/bindings")
+
 if (WIN32 OR MING1W)
     add_compile_definitions(WIN32_LEAN_AND_MEAN)
 endif ()
