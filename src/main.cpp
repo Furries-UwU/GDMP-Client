@@ -40,11 +40,11 @@ using namespace geode::prelude;
                             auto col_secondary_p1 = visuals.colors().color_p1().secondary();
                             auto glowy = visuals.colors().glowy();
 
-                            /*p1->setColor(ccc3(
+                            p1->setColor(ccc3(
                                 (col_primary_p1 >> 16) & 0xff,
                                 (col_primary_p1 >> 8) & 0xff,
                                 col_primary_p1 & 0xff
-                            ));*/ // todo
+                            ));
                             p1->setSecondColor(ccc3(
                                 (col_secondary_p1 >> 16) & 0xff,
                                 (col_secondary_p1 >> 8) & 0xff,
