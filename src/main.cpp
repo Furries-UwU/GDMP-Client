@@ -73,7 +73,7 @@ using namespace geode::prelude;
                             p1->updatePlayerFrame(visuals.icon_cube());
                             //p1->updatePlayerRobotFrame(visuals.icon_robot()); // todo
                             //p1->updatePlayerSpiderFrame(visuals.icon_spider()); // todo
-                            p1->updatePlayerSwingFrame(visuals.icon_swing());
+                            //p1->updatePlayerSwingFrame(visuals.icon_swing());
 
                             Global::get()->players[player_join.p_id()] = p;
                         });
@@ -108,7 +108,7 @@ using namespace geode::prelude;
                         p1->toggleDartMode(iconType_p1 == IconType::Wave, false);
                         p1->toggleRobotMode(iconType_p1 == IconType::Robot, false);
                         p1->toggleSpiderMode(iconType_p1 == IconType::Spider, false);
-                        p1->toggleSwingMode(iconType_p1 == IconType::Swing, false);
+                        //p1->toggleSwingMode(iconType_p1 == IconType::Swing, false);
 
                         if (scale_p1 > 1.0f || scale_p1 < 0.0f) scale_p1 = 1.0f;
 
